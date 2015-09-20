@@ -1,1 +1,6 @@
 C:\Users\21103436\Desktop\BIT\IT7x22\Assignment_Two\Monopoly_Game\Monopoly\Monopoly\bin\Debug\Monopoly.exe.config
+C:\Users\21103436\Desktop\BIT\IT7x22\Assignment_Two\Monopoly_Game\Monopoly\Monopoly\bin\Debug\Monopoly.exe
+C:\Users\21103436\Desktop\BIT\IT7x22\Assignment_Two\Monopoly_Game\Monopoly\Monopoly\bin\Debug\Monopoly.pdb
+C:\Users\21103436\Desktop\BIT\IT7x22\Assignment_Two\Monopoly_Game\Monopoly\Monopoly\obj\Debug\Monopoly.csprojResolveAssemblyReference.cache
+C:\Users\21103436\Desktop\BIT\IT7x22\Assignment_Two\Monopoly_Game\Monopoly\Monopoly\obj\Debug\Monopoly.exe
+C:\Users\21103436\Desktop\BIT\IT7x22\Assignment_Two\Monopoly_Game\Monopoly\Monopoly\obj\Debug\Monopoly.pdb
