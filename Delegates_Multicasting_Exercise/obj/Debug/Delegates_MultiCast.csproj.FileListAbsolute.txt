@@ -1,0 +1,5 @@
+C:\Users\21103436\Desktop\BIT\IT7x22\Pointers_Exercise\Pointers\Delegates_Multitask\bin\Debug\Delegates_Multitask.exe.config
+C:\Users\21103436\Desktop\BIT\IT7x22\Pointers_Exercise\Pointers\Delegates_Multitask\bin\Debug\Delegates_Multitask.exe
+C:\Users\21103436\Desktop\BIT\IT7x22\Pointers_Exercise\Pointers\Delegates_Multitask\bin\Debug\Delegates_Multitask.pdb
+C:\Users\21103436\Desktop\BIT\IT7x22\Pointers_Exercise\Pointers\Delegates_Multitask\obj\Debug\Delegates_Multitask.exe
+C:\Users\21103436\Desktop\BIT\IT7x22\Pointers_Exercise\Pointers\Delegates_Multitask\obj\Debug\Delegates_Multitask.pdb
