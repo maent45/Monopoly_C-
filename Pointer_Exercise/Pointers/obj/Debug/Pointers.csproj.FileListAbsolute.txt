@@ -1,0 +1,6 @@
+C:\Users\21103436\Desktop\BIT\IT7x22\Pointers_Exercise\Pointers\Pointers\bin\Debug\Pointers.exe.config
+C:\Users\21103436\Desktop\BIT\IT7x22\Pointers_Exercise\Pointers\Pointers\bin\Debug\Pointers.exe
+C:\Users\21103436\Desktop\BIT\IT7x22\Pointers_Exercise\Pointers\Pointers\bin\Debug\Pointers.pdb
+C:\Users\21103436\Desktop\BIT\IT7x22\Pointers_Exercise\Pointers\Pointers\obj\Debug\Pointers.csprojResolveAssemblyReference.cache
+C:\Users\21103436\Desktop\BIT\IT7x22\Pointers_Exercise\Pointers\Pointers\obj\Debug\Pointers.exe
+C:\Users\21103436\Desktop\BIT\IT7x22\Pointers_Exercise\Pointers\Pointers\obj\Debug\Pointers.pdb
