@@ -22,14 +22,21 @@ namespace Pointers
                 Console.WriteLine("memory address for var i is: " + (int)myIntPointer);
                 Console.WriteLine("value for var i address is: " + *myIntPointer);
 
-                Console.Read();
+                Console.ReadLine();
 
                 //direct the pointer to i address
-                myIntPointer = &i;
+                myIntPointer = &j;
                 Console.WriteLine("memory address for var i is: " + (int)myIntPointer);
                 Console.WriteLine("value for var i address is: " + *myIntPointer);
 
-                Console.Read();
+                Console.ReadLine();
+
+                //direct the pointer to i address
+                myIntPointer = &k;
+                Console.WriteLine("memory address for var i is: " + (int)myIntPointer);
+                Console.WriteLine("value for var i address is: " + *myIntPointer);
+
+                Console.ReadLine();
             }
         }
     }
