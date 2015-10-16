@@ -1,0 +1,5 @@
+C:\Users\maen\Desktop\bach_IT\Year Three\Semester Two\IT7x22\Class Labs\Binary_File\Object_Serialization_Exercise\Object_Serialization_Exercise\bin\Debug\Object_Serialization_Exercise.dll
+C:\Users\maen\Desktop\bach_IT\Year Three\Semester Two\IT7x22\Class Labs\Binary_File\Object_Serialization_Exercise\Object_Serialization_Exercise\bin\Debug\Object_Serialization_Exercise.pdb
+C:\Users\maen\Desktop\bach_IT\Year Three\Semester Two\IT7x22\Class Labs\Binary_File\Object_Serialization_Exercise\Object_Serialization_Exercise\obj\Debug\Object_Serialization_Exercise.csprojResolveAssemblyReference.cache
+C:\Users\maen\Desktop\bach_IT\Year Three\Semester Two\IT7x22\Class Labs\Binary_File\Object_Serialization_Exercise\Object_Serialization_Exercise\obj\Debug\Object_Serialization_Exercise.dll
+C:\Users\maen\Desktop\bach_IT\Year Three\Semester Two\IT7x22\Class Labs\Binary_File\Object_Serialization_Exercise\Object_Serialization_Exercise\obj\Debug\Object_Serialization_Exercise.pdb
