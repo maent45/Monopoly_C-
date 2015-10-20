@@ -19,7 +19,7 @@ namespace MolopolyGame
         private int countDoubleRoll;
 
         private bool inJail;
-        private bool firstTimeInJail = false;
+        public bool firstTurnInJail = false;
 
         //each player has two dice
         Die die1 = new Die();
@@ -56,26 +56,26 @@ namespace MolopolyGame
         }
 
         /*----- MAIN METHOD TO CHECK FOR DOUBLE ROLLS -----*/
-        public int checkForDoubleRolls()
+        public bool checkForDoubleRolls()
         {
             //if Dice 1 rolls same number as Dice 2 then increment count for doubles
             if (die1.ToString() == die2.ToString() || die2.ToString() == die1.ToString())
             {
                 countDoubleRoll++;
 
-                if(countDoubleRoll == 3)
+                if(countDoubleRoll >= 3)
                 {
-                    Console.WriteLine("You have rolled doubles 3 times, you've been sent to jail!");
+                    this.firstTurnInJail = true;
+
+                    Console.WriteLine("\tYou have rolled doubles 3 times, you've been sent to jail!");
                     //don't let player pass GO and don't let collect $200
-                    setLocation(10, false);
-                    setIsInJail();
+                    this.setIsInJail();
+                    this.setLocation(10, false);
+                    
+                    countDoubleRoll = 0;
                 }
             }
-            else
-            {
-                countDoubleRoll = 0;
-            }
-            return countDoubleRoll;
+            return true;
         }
 
         /*----- MAIN METHOD TO MAKE PLAYER MOVE ON BOARD -----*/
@@ -90,7 +90,7 @@ namespace MolopolyGame
             //check if player is in jail, if so restrict player from moving to other squares on next move
             if (this.getJailStats() == true)
             {
-                setIsInJail();
+                Console.WriteLine("");
             }
             else
             {
@@ -109,7 +109,15 @@ namespace MolopolyGame
 
         public string BriefDetailsToString()
         {
-            return String.Format("You are on {0}.\tYou have ${1}.", Board.access().getProperty(this.getLocation()).getName(), this.getBalance());
+            if (getJailStats() == true)
+            {
+                Console.WriteLine("\tYou are in Jail! To get out you must:\n\t\t-Pay $50.00\n\t\t-Draw 'Get out of Jail Card'\n\t\t-Roll Doubles");
+                return null;
+            }
+            else
+            {
+                return String.Format("You are on {0}.\tYou have ${1}.", Board.access().getProperty(this.getLocation()).getName(), this.getBalance());
+            }
         }
 
         public override string ToString()
@@ -202,10 +210,11 @@ namespace MolopolyGame
             return this.isInactive;
         }
 
-        /*----- player jail properties and methods -----*/
+        /*----- PLAYER JAIL METHODS -----*/
         //return the jail status
         public bool getJailStats()
         {
+            
             //will return value of inJail if true or false
             return this.inJail;
         }
@@ -213,6 +222,7 @@ namespace MolopolyGame
         //send the player to jail
         public void setIsInJail()
         {
+            firstTurnInJail = true;
             //set inJail var value to true to place player in jail
             this.inJail = true;
         }

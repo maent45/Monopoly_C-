@@ -60,7 +60,7 @@ namespace MolopolyGame
             player.move();
 
             //Display making move
-            Console.WriteLine("*****Move for {0}:*****", player.getName());
+            Console.WriteLine("\t\t*****Move for Player {0}:*****\n", player.getName());
 
             //check for double rolls
             //player.checkForDoubleRolls();
@@ -362,18 +362,9 @@ namespace MolopolyGame
             Console.WriteLine("4. Buy House for Property");
             Console.WriteLine("5. Trade Property with Player");
 
-            if (player.getJailStats() == true)
+            if (player.getJailStats() == true && player.firstTurnInJail == false)
             {
                 Console.WriteLine("6. Pay $50.00 fine to get out of Jail");
-            }
-            else
-            {
-                Console.WriteLine("\n{0}Please make a selection:\n", playerPrompt(player));
-                Console.WriteLine("1. Finish turn");
-                Console.WriteLine("2. View your details");
-                Console.WriteLine("3. Purchase This Property");
-                Console.WriteLine("4. Buy House for Property");
-                Console.WriteLine("5. Trade Property with Player");
             }
 
             Console.Write("(1-6)>");
@@ -387,6 +378,8 @@ namespace MolopolyGame
             switch (resp)
             {
                 case 1:
+                    //set firstTimeInJail to false to reset condition of player's first turn in Jail
+                    player.firstTurnInJail = false;
                     break;
                 case 2:
                     Console.WriteLine("==================================");
