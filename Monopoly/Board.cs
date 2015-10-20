@@ -1,58 +1,90 @@
-﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace Monopoly
+namespace MolopolyGame
 {
-    // This is class for singleton Board that has properties and traders on it.
+    /// <summary>
+    /// This is class for singleton Board that has properties and traders on it.
+    /// </summary>
+    
     public class Board
     {
-        //provide a static instance of this class to create singleton
+        //provide an static instance of this class to create singleton
         static Board board;
         private ArrayList properties;
         private ArrayList players;
         int SQUARES = 40;
-
-        //method to access Singleton
+     
+        //method to access singleton
         public static Board access()
         {
             if (board == null)
                 board = new Board();
             return board;
         }
+
         public Board()
         {
             properties = new ArrayList(this.getSquares());
             players = new ArrayList();
         }
+
         public int getSquares()
         {
             return this.SQUARES;
         }
+
         public override string ToString()
         {
             throw new System.NotImplementedException();
         }
 
-        //method to add a player --still need to create the Player class
-        /*public void addPlayer(Player player)
+        public void addPlayer(Player player)
         {
             players.Add(player);
-        }*/
+        }
 
-        //method to add property --still need to create the Property class
-        /*public void addProperty(Property property)
+        public void addProperty(Property property)
         {
             this.properties.Add(property);
-        }*/
+        }
 
-        //method to return amount of players
         public int getPlayerCount()
         {
             return players.Count;
+        }
+
+       
+
+        public Player getPlayer(int playerIndex)
+        {
+            return (Player)players[playerIndex];
+        }
+
+        public Player getPlayer(string sName)
+        {
+            foreach (Player p in players)
+            {
+                if (p.getName() == sName)
+                    return p;
+            }
+            // if no players with that name return null
+            return null;
+        }
+
+        public Property getProperty(int propIndex)
+        {
+            return (Property)properties[propIndex];
+        }
+
+        public ArrayList getPlayers()
+        {
+            return this.players;
+        }
+
+        public ArrayList getProperties()
+        {
+            return this.properties;
         }
     }
 }
