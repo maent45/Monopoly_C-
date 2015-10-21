@@ -41,13 +41,15 @@ namespace MolopolyGame
                 //don't let player pass GO and don't let collect $200
                 player.setLocation(10, false);
 
-                return base.landOn(ref player) + String.Format(player.getName() + " has gone to jail!");
+                return null;
+                //return base.landOn(ref player) + String.Format(player.getName() + " has gone to jail!");
             }
             else
             {
                 if(player.getJailStats() == true)
                 {
-                    return base.landOn(ref player) + String.Format(player.getName() + " you're now in jail, you cannot pass Go or collect $200.00\nTo Get out of jail you must:\n \t-pay $50\n \t-use a 'Get out of Jail Card'\n \t-or attempt to roll doubles.\n");
+                    return null;
+                    //return base.landOn(ref player) + String.Format(player.getName() + " you're now in jail, you cannot pass Go or collect $200.00\nTo Get out of jail you must:\n \t-pay $50\n \t-use a 'Get out of Jail Card'\n \t-or attempt to roll doubles.\n");
                 }
                 else 
                 {
