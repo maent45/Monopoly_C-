@@ -368,7 +368,7 @@ namespace MolopolyGame
                 Console.WriteLine("\t6. Pay $50.00 fine to get out of Jail");
             }
 
-            Console.Write("\t(1-6)>");
+            Console.Write("\t(1-7)>");
             //read response
             resp = inputInteger();
             //if response is invalid redisplay menu
@@ -411,17 +411,15 @@ namespace MolopolyGame
                     Console.WriteLine("You've paid $50 and have been released from Jail!\nPress ENTER to continue.");
                     Console.ReadLine();
                     break;
+                case 7:
+                    this.mortgageProperty(player);
+                    this.displayPlayerChoiceMenu(player);
+                    break;
                 default:
                     Console.WriteLine("That option is not avaliable. Please try again.");
                     this.displayPlayerChoiceMenu(player);
                     break;
             }
-        }
-
-        /*----- METHOD TO MORTGAGE PROEPRTY -----*/
-        public void mortgageProperty()
-        {
-
         }
 
         public void purchaseProperty(Player player)
@@ -430,7 +428,7 @@ namespace MolopolyGame
             if (Board.access().getProperty(player.getLocation()).availableForPurchase())
             {
                 TradeableProperty propertyLocatedOn = (TradeableProperty)Board.access().getProperty(player.getLocation());
-                bool respYN = getInputYN(player, string.Format("'{0}' is available to purchase for ${1}. Are you sure you want to purchase it?", propertyLocatedOn.getName(), propertyLocatedOn.getPrice()));
+                bool respYN = getInputYN(player, string.Format("\n\t'{0}' is available to purchase for ${1}. \n\tAre you sure you want to purchase it?", propertyLocatedOn.getName(), propertyLocatedOn.getPrice()));
                 if (respYN)
                 {
                     propertyLocatedOn.purchase(ref player);//purchase property
@@ -452,7 +450,7 @@ namespace MolopolyGame
             if (player.getPropertiesOwnedFromBoard().Count == 0)
             {
                 //write message
-                Console.WriteLine("{0}You do not own any properties.", playerPrompt(player));
+                Console.WriteLine("{0}\nYou do not own any properties.", playerPrompt(player));
                 //return from method
                 return;
             }
@@ -491,6 +489,29 @@ namespace MolopolyGame
             }
         }
 
+        /*----- METHOD TO MORTGAGE PROEPRTY -----*/
+        public void mortgageProperty(Player player)
+        {
+            string sPropPrompt = String.Format("{0}\tPlease select a property to mortgage:", this.playerPrompt(player));
+
+            string sPlayerPrompt = String.Format("{0}\tPlease select a player to trade with:", this.playerPrompt(player));
+
+            TradeableProperty propertyToMortgage = (TradeableProperty)this.displayPropertyChooser(player.getPropertiesOwnedFromBoard(), sPropPrompt);
+
+            //if dont own any properties
+            if (propertyToMortgage == null)
+            {
+                //write message
+                Console.WriteLine("\n{0}You do not own any properties to mortgage.", playerPrompt(player));
+                //return from method
+                return;
+            }
+
+            Console.WriteLine("Property you have chosen to mortgage is: " + propertyToMortgage);
+            Console.ReadLine();
+
+        }
+
         public void tradeProperty(Player player)
         {
             //create prompt
@@ -514,7 +535,6 @@ namespace MolopolyGame
             Player playerToTradeWith = this.displayPlayerChooser(Board.access().getPlayers(), player, sPlayerPrompt);
 
             //get the amount wanted
-
             string inputAmtMsg = string.Format("{0}How much do you want for this property?", playerPrompt(player));
 
             decimal amountWanted = inputDecimal(inputAmtMsg);
@@ -551,17 +571,17 @@ namespace MolopolyGame
             Console.WriteLine(sPrompt);
             for (int i = 0; i < properties.Count; i++)
             {
-                Console.WriteLine("{0}. {1}", i + 1, properties[i].ToString());
+                Console.WriteLine("\t{0}. {1}", i + 1, properties[i].ToString());
             }
             //display prompt
-            Console.Write("({0}-{1})>", 1, properties.Count);
+            Console.Write("(\t{0}-{1})>", 1, properties.Count);
             //get input
             int resp = this.inputInteger();
 
             //if outside of range
             if ((resp < 1) || (resp > properties.Count))
             {
-                Console.WriteLine("That option is not avaliable. Please try again.");
+                Console.WriteLine("\tThat option is not avaliable. Please try again.");
                 this.displayPropertyChooser(properties, sPrompt);
                 return null;
             }
