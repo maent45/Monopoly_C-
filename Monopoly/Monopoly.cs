@@ -356,18 +356,19 @@ namespace MolopolyGame
 
             int resp = 0;
             Console.WriteLine("\n{0}Please make a selection:\n", playerPrompt(player));
-            Console.WriteLine("1. Finish turn");
-            Console.WriteLine("2. View your details");
-            Console.WriteLine("3. Purchase This Property");
-            Console.WriteLine("4. Buy House for Property");
-            Console.WriteLine("5. Trade Property with Player");
+            Console.WriteLine("\t1. Finish turn");
+            Console.WriteLine("\t2. View your details");
+            Console.WriteLine("\t3. Purchase This Property");
+            Console.WriteLine("\t4. Buy House for Property");
+            Console.WriteLine("\t5. Trade Property with Player");
+            Console.WriteLine("\t7. Mortgage Property");
 
             if (player.getJailStats() == true && player.firstTurnInJail == false)
             {
-                Console.WriteLine("6. Pay $50.00 fine to get out of Jail");
+                Console.WriteLine("\t6. Pay $50.00 fine to get out of Jail");
             }
 
-            Console.Write("(1-6)>");
+            Console.Write("\t(1-6)>");
             //read response
             resp = inputInteger();
             //if response is invalid redisplay menu
@@ -382,9 +383,9 @@ namespace MolopolyGame
                     player.firstTurnInJail = false;
                     break;
                 case 2:
-                    Console.WriteLine("==================================");
+                    Console.WriteLine("\n\t==================================");
                     Console.WriteLine(player.FullDetailsToString());
-                    Console.WriteLine("==================================");
+                    Console.WriteLine("\t==================================");
                     this.displayPlayerChoiceMenu(player);
                     break;
                 case 3:
@@ -415,6 +416,12 @@ namespace MolopolyGame
                     this.displayPlayerChoiceMenu(player);
                     break;
             }
+        }
+
+        /*----- METHOD TO MORTGAGE PROEPRTY -----*/
+        public void mortgageProperty()
+        {
+
         }
 
         public void purchaseProperty(Player player)

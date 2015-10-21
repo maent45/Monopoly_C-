@@ -127,7 +127,7 @@ namespace MolopolyGame
 
         public string FullDetailsToString()
         {
-            return String.Format("Player:{0}.\nBalance: ${1}\nLocation: {2} (Square {3}) \nProperties Owned:\n{4}", this.getName(), this.getBalance(), Board.access().getProperty(this.getLocation()), this.getLocation(), this.PropertiesOwnedToString());
+            return String.Format("\tPlayer:{0}.\n\tBalance: ${1}\n\tLocation: {2} (Square {3}) \n\tProperties Owned: {4}", this.getName(), this.getBalance(), Board.access().getProperty(this.getLocation()), this.getLocation(), this.PropertiesOwnedToString());
         }
 
         public string PropertiesOwnedToString()
@@ -244,7 +244,7 @@ namespace MolopolyGame
             this.setNotInJail();
 
             //this.inJail = true;
-            Console.WriteLine("You've paid $50 and have been released from Jail!\nPress ENTER to continue.");
+            Console.WriteLine("\t\tYou've paid $50 and have been released from Jail!\n\t\tPress ENTER to continue.");
             Console.ReadLine();
         }
     }
