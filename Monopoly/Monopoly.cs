@@ -492,10 +492,13 @@ namespace MolopolyGame
         /*----- METHOD TO MORTGAGE PROEPRTY -----*/
         public void mortgageProperty(Player player)
         {
+            decimal mortgageValue;
+
             string sPropPrompt = String.Format("{0}\tPlease select a property to mortgage:", this.playerPrompt(player));
 
             string sPlayerPrompt = String.Format("{0}\tPlease select a player to trade with:", this.playerPrompt(player));
 
+            //get selected property to mortgage
             TradeableProperty propertyToMortgage = (TradeableProperty)this.displayPropertyChooser(player.getPropertiesOwnedFromBoard(), sPropPrompt);
 
             //if dont own any properties
@@ -507,7 +510,11 @@ namespace MolopolyGame
                 return;
             }
 
-            Console.WriteLine("Property you have chosen to mortgage is: " + propertyToMortgage);
+            mortgageValue = propertyToMortgage.getPrice() / 80 * 100;
+
+            Console.WriteLine("Property you have chosen to mortgage is: " + propertyToMortgage.getName() + " $" + propertyToMortgage.getPrice() + "\n");
+            Console.WriteLine("mortgage val is: " + mortgageValue);
+            //Console.WriteLine(propertyToMortgage.getPrice());
             Console.ReadLine();
 
         }
