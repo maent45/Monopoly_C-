@@ -416,10 +416,10 @@ namespace MolopolyGame
                     this.mortgageProperty(player);
                     this.displayPlayerChoiceMenu(player);
                     break;
-                case 8:
-                    this.unMortgageProperty(player);
-                    this.displayPlayerChoiceMenu(player);
-                    break;
+                //case 8:
+                //    this.unMortgageProperty(player);
+                //    this.displayPlayerChoiceMenu(player);
+                //    break;
                 default:
                     Console.WriteLine("That option is not avaliable. Please try again.");
                     this.displayPlayerChoiceMenu(player);
@@ -506,7 +506,7 @@ namespace MolopolyGame
             TradeableProperty propertyToMortgage = (TradeableProperty)this.displayPropertyChooser(player.getPropertiesOwnedFromBoard(), sPropPrompt);
 
             //if dont own any properties
-            if (propertyToMortgage == null)
+            if (player.getPropertiesOwnedFromBoard().Count == 0 /*propertyToMortgage == null*/)
             {
                 //write message
                 Console.WriteLine("\n{0}You do not own any properties to mortgage.", playerPrompt(player));
@@ -514,7 +514,7 @@ namespace MolopolyGame
                 return;
             }
 
-            decimal mortgageValue = propertyToMortgage.calculateMortgage();
+            decimal mortgageValue = propertyToMortgage.calculateMortgage(propertyToMortgage); //propertyToMortgage.calculateMortgage();
 
             Console.WriteLine("\tProperty you have chosen to mortgage is: " + propertyToMortgage.getName() + ", \tits purchase price is $" + propertyToMortgage.getPrice() + "\n");
 
@@ -553,8 +553,8 @@ namespace MolopolyGame
             else
             {
                 //now call the unmortgage method in Property class
-                propertyToUnMortgage.unMortgage();
-                Console.WriteLine("You've successfully unmortgaged " + propertyToUnMortgage.getName());
+                propertyToUnMortgage.unMortgage(propertyToUnMortgage);
+                Console.WriteLine("\n\tYou've successfully unmortgaged " + propertyToUnMortgage.getName());
             }
         }
 
