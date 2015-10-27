@@ -81,13 +81,28 @@ namespace MolopolyGame
             //decimal dMortgagePrice = (TradeableProperty)property.dPrice;
 
             decimal dMortgagePrice = 0;
-            //
-            if (property == (Residential)property)
-            {
-                //cast rp as Residential class
-                Residential rp = (Residential)property;
+            //Get types of properties
+            System.Type residential = typeof(Residential);
+            System.Type utility = typeof(Utility);
+            System.Type transport = typeof(Transport);
 
-                dMortgagePrice = rp.get_dPrice();
+            if (property.GetType() == residential)
+            {
+                //cast the property as Residential
+                Residential residentialProperty = (Residential)property;
+                dMortgagePrice = residentialProperty.getPrice();
+            }
+            else if (property.GetType() == utility)
+            {
+                //cast the property as Utility
+                Utility utilityProperty = (Utility)property;
+                dMortgagePrice = utilityProperty.getPrice();
+            }
+            else if (property.GetType() == transport)
+            {
+                //cast the property as Transport
+                Transport transportProperty = (Transport)property;
+                dMortgagePrice = transportProperty.getPrice();
             }
 
             return dMortgagePrice * 80 / 100;
