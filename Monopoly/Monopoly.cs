@@ -362,6 +362,7 @@ namespace MolopolyGame
             Console.WriteLine("\t4. Buy House for Property");
             Console.WriteLine("\t5. Trade Property with Player");
             Console.WriteLine("\t7. Mortgage Property");
+            Console.WriteLine("\t8. Unmortgage Property");
 
             if (player.getJailStats() == true && player.firstTurnInJail == false)
             {
@@ -413,6 +414,10 @@ namespace MolopolyGame
                     break;
                 case 7:
                     this.mortgageProperty(player);
+                    this.displayPlayerChoiceMenu(player);
+                    break;
+                case 8:
+                    this.unMortgageProperty(player);
                     this.displayPlayerChoiceMenu(player);
                     break;
                 default:
@@ -495,7 +500,7 @@ namespace MolopolyGame
             decimal playerBalBeforeMortgage = player.getBalance();
 
             string sPropPrompt = String.Format("{0}\tPlease select a property to mortgage:", this.playerPrompt(player));
-            string sPlayerPrompt = String.Format("{0}\tPlease select a player to trade with:", this.playerPrompt(player));
+            //string sPlayerPrompt = String.Format("{0}\tPlease select a player to trade with:", this.playerPrompt(player));
 
             //get selected property to mortgage
             TradeableProperty propertyToMortgage = (TradeableProperty)this.displayPropertyChooser(player.getPropertiesOwnedFromBoard(), sPropPrompt);
@@ -508,7 +513,6 @@ namespace MolopolyGame
                 //return from method
                 return;
             }
-            //checking if property is mortgaged
 
             decimal mortgageValue = propertyToMortgage.calculateMortgage();
 
@@ -526,13 +530,28 @@ namespace MolopolyGame
 
                 Console.WriteLine("\nYour new balance is: " + player.getBalance());
 
-                propertyToMortgage.mortgagePropery();
+                propertyToMortgage.mortgageProperty();
                 Console.WriteLine("\tyou've successfully mortaged " + propertyToMortgage.getName());
             }
             else
             {
-                Console.WriteLine("\t" + propertyToMortgage.getName() + " has already been mortgaged!");
+                Console.WriteLine("\n\t" + propertyToMortgage.getName() + " has already been mortgaged!");
             }
+        }
+
+        /*----- METHOD TO UNMORTGAGE PROPERTY -----*/
+        public void unMortgageProperty(Player player)
+        {
+            string sPropPrompt = String.Format("{0}\tPlease select a property to mortgage:", this.playerPrompt(player));
+            //get selected property to UnMortgage
+            TradeableProperty propertyToUnMortgage = (TradeableProperty)this.displayPropertyChooser(player.getPropertiesOwnedAndMortgaged(), sPropPrompt);
+            //check if player has any mortgaged properties
+            if (player.getPropertiesOwnedAndMortgaged().Count == 0)
+            {
+                Console.WriteLine("\n\tYou don't currently own any mortgaged properties.");
+            }
+            //now call the unmortgage method in Property class
+
         }
 
         public void tradeProperty(Player player)
