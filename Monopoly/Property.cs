@@ -12,6 +12,9 @@ namespace MolopolyGame
     {
         protected string sName;
         protected Trader owner;
+        protected bool bMortgaged;
+        protected bool bUnMortgaged;
+        protected decimal dPrice;
         //protected decimal mortgageRate;
         public Property(): this("Property"){}
 
@@ -60,6 +63,32 @@ namespace MolopolyGame
         public virtual bool availableForPurchase()
         {
             return false;//generic properties are not available for purchase
+        }
+
+        /*------ METHODS TO MORTGAGE AND UNMORTGAGE PROPERTIES ------*/
+        //REFERENCE -> snippets of the following methods were obtained from Luke Hardiman
+        //is the property mortgage
+        public virtual bool isMortgaged()
+        {
+            return this.bMortgaged;
+        }
+
+        //calculate the mortage value
+        public virtual decimal calculateMortgage()
+        {
+            return this.dPrice * 80 / 100;
+        }
+
+        //logic for mortgaging propoety, add checks then proceed with mortgage
+        public virtual void mortgageProperty()
+        {
+            this.bMortgaged = true;
+        }
+
+        //calculate 10% of property price as the unmortgaging rate
+        public virtual decimal calculateUnMortgage()
+        {
+            return this.dPrice * 10 / 100 + calculateMortgage();
         }
     }
 
