@@ -121,11 +121,11 @@ namespace MolopolyGame
         public void displayMainChoiceMenu()
         {
             int resp = 0;
-            Console.WriteLine("Please make a selection:\n");
-            Console.WriteLine("1. Setup Monopoly Game");
-            Console.WriteLine("2. Start New Game");
-            Console.WriteLine("3. Exit");
-            Console.Write("(1-3)>");
+            Console.WriteLine("\tPlease make a selection:\n");
+            Console.WriteLine("\t1. Setup Monopoly Game");
+            Console.WriteLine("\t2. Start New Game");
+            Console.WriteLine("\t3. Exit");
+            Console.Write("\t(1-3)>");
             //read response
             resp = inputInteger();
             //if response is invalid redisplay menu
@@ -147,7 +147,7 @@ namespace MolopolyGame
                             this.playGame();
                         else
                         {
-                            Console.WriteLine("The Game has not been set up yet.\n");
+                            Console.WriteLine("\tThe Game has not been set up yet.\n");
                             this.displayMainChoiceMenu();
                         }
                         break;
@@ -155,7 +155,7 @@ namespace MolopolyGame
                         Environment.Exit(0);
                         break;
                     default:
-                        throw new ApplicationException("That option is not avaliable. Please try again.");
+                        throw new ApplicationException("\tThat option is not avaliable. Please try again.");
                 }
             }
             catch (ApplicationException ex)
@@ -194,7 +194,7 @@ namespace MolopolyGame
             }
             catch (FormatException ex)
             {
-                Console.WriteLine("Please enter a number such as 1 or 2. Please try again.");
+                Console.WriteLine("\tPlease enter a number such as 1 or 2. Please try again.");
                 return 0;
             }
         }
@@ -207,7 +207,7 @@ namespace MolopolyGame
             }
             catch (FormatException ex)
             {
-                Console.WriteLine("Please enter a decimal number such as 25.54 or 300. Please try again.");
+                Console.WriteLine("\tPlease enter a decimal number such as 25.54 or 300. Please try again.");
                 return 0;
             }
         }
@@ -221,7 +221,7 @@ namespace MolopolyGame
             //if response is invalid redisplay 
             if (amount == 0)
             {
-                Console.WriteLine("That was not a valid amount. Please try again");
+                Console.WriteLine("\tThat was not a valid amount. Please try again");
                 this.inputDecimal(msg);
             }
             return amount;
@@ -284,27 +284,27 @@ namespace MolopolyGame
             Board.access().addProperty(luckFactory.create("Super Tax", true, 100));
             Board.access().addProperty(resFactory.create("Rangitoto", 400, 40, 200));
 
-            Console.WriteLine("Properties have been setup");
+            Console.WriteLine("\n\tProperties have been setup");
         }
 
         public void setUpPlayers()
         {
             //Add players to the board
-            Console.WriteLine("How many players are playing?");
-            Console.Write("(2-8)>");
+            Console.WriteLine("\tHow many players are playing?");
+            Console.Write("\t(2-8)>");
             int playerCount = this.inputInteger();
 
             //if it is out of range then display msg and redo this method
             if ((playerCount < 2) || (playerCount > 8))
             {
-                Console.WriteLine("That is an invalid amount. Please try again.");
+                Console.WriteLine("\tThat is an invalid amount. Please try again.");
                 this.setUpPlayers();
             }
 
             //Ask for players names
             for (int i = 0; i < playerCount; i++)
             {
-                Console.WriteLine("Please enter the name for Player {0}:", i + 1);
+                Console.WriteLine("\tPlease enter the name for Player {0}:", i + 1);
                 Console.Write(">");
                 string sPlayerName = Console.ReadLine();
                 Player player = new Player(sPlayerName);
@@ -313,10 +313,10 @@ namespace MolopolyGame
                 player.playerPassGo += playerPassGoHandler;
                 //add player 
                 Board.access().addPlayer(player);
-                Console.WriteLine("{0} has been added to the game.", Board.access().getPlayer(i).getName());
+                Console.WriteLine("\t{0} has been added to the game.", Board.access().getPlayer(i).getName());
             }
 
-            Console.WriteLine("Players have been setup");
+            Console.WriteLine("\tPlayers have been setup");
         }
 
         public string playerPrompt(int playerIndex)
@@ -332,7 +332,7 @@ namespace MolopolyGame
         public bool getInputYN(Player player, string sQuestion)
         {
             Console.WriteLine(playerPrompt(player) + sQuestion);
-            Console.Write("y/n>");
+            Console.Write("\t<y/n>");
             string resp = Console.ReadLine().ToUpper();
 
             switch (resp)
@@ -342,7 +342,7 @@ namespace MolopolyGame
                 case "N":
                     return false;
                 default:
-                    Console.WriteLine("That answer cannot be understood. Please answer 'y' or 'n'.");
+                    Console.WriteLine("\tThat answer cannot be understood. Please answer 'y' or 'n'.");
                     this.getInputYN(player, sQuestion);
                     return false;
             }
@@ -492,10 +492,9 @@ namespace MolopolyGame
         /*----- METHOD TO MORTGAGE PROEPRTY -----*/
         public void mortgageProperty(Player player)
         {
-            decimal mortgageValue;
+            decimal playerBalBeforeMortgage = player.getBalance();
 
             string sPropPrompt = String.Format("{0}\tPlease select a property to mortgage:", this.playerPrompt(player));
-
             string sPlayerPrompt = String.Format("{0}\tPlease select a player to trade with:", this.playerPrompt(player));
 
             //get selected property to mortgage
@@ -509,14 +508,31 @@ namespace MolopolyGame
                 //return from method
                 return;
             }
+            //checking if property is mortgaged
 
-            mortgageValue = propertyToMortgage.getPrice() / 80 * 100;
+            decimal mortgageValue = propertyToMortgage.calculateMortgage();
 
-            Console.WriteLine("Property you have chosen to mortgage is: " + propertyToMortgage.getName() + " $" + propertyToMortgage.getPrice() + "\n");
-            Console.WriteLine("mortgage val is: " + mortgageValue);
-            //Console.WriteLine(propertyToMortgage.getPrice());
-            Console.ReadLine();
+            Console.WriteLine("\tProperty you have chosen to mortgage is: " + propertyToMortgage.getName() + ", \tits purchase price is $" + propertyToMortgage.getPrice() + "\n");
 
+            Console.WriteLine("\tmortgage value is: " + mortgageValue);
+
+            //check if property is already mortgaged
+            if (propertyToMortgage.isMortgaged() == false)
+            {
+                //make the bank pay the player mortgageValue
+                Banker.access().pay(mortgageValue);
+                //allocate mortgageValue to player
+                player.receive(mortgageValue);
+
+                Console.WriteLine("\nYour new balance is: " + player.getBalance());
+
+                propertyToMortgage.mortgagePropery();
+                Console.WriteLine("\tyou've successfully mortaged " + propertyToMortgage.getName());
+            }
+            else
+            {
+                Console.WriteLine("\t" + propertyToMortgage.getName() + " has already been mortgaged!");
+            }
         }
 
         public void tradeProperty(Player player)
@@ -647,7 +663,6 @@ namespace MolopolyGame
             Player p = (Player)obj;
             //display bankrupt msg
             Console.WriteLine("{0} IS BANKRUPT!", p.getName().ToUpper());
-
         }
 
         public static void playerPassGoHandler(object obj, EventArgs args)
