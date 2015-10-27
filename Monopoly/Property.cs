@@ -12,7 +12,7 @@ namespace MolopolyGame
     {
         protected string sName;
         protected Trader owner;
-        protected decimal mortgageRate;
+        //protected decimal mortgageRate;
         public Property(): this("Property"){}
 
         public Property(string sName)
@@ -61,15 +61,6 @@ namespace MolopolyGame
         {
             return false;//generic properties are not available for purchase
         }
-
-        //method to calculate the mortgage price
-        //public decimal calculateMortgage()
-        //{
-        //    Monopoly monopoly = new Monopoly();
-
-        //    mortgageRate = monopoly.prop
-        //    return;
-        //}
     }
 
    
