@@ -528,7 +528,7 @@ namespace MolopolyGame
                 //allocate mortgageValue to player
                 player.receive(mortgageValue);
 
-                Console.WriteLine("\nYour new balance is: " + player.getBalance());
+                Console.WriteLine("\n\tYour new balance is: " + player.getBalance());
 
                 propertyToMortgage.mortgageProperty();
                 Console.WriteLine("\tyou've successfully mortaged " + propertyToMortgage.getName());
@@ -550,8 +550,12 @@ namespace MolopolyGame
             {
                 Console.WriteLine("\n\tYou don't currently own any mortgaged properties.");
             }
-            //now call the unmortgage method in Property class
-
+            else
+            {
+                //now call the unmortgage method in Property class
+                propertyToUnMortgage.unMortgage();
+                Console.WriteLine("You've successfully unmortgaged " + propertyToUnMortgage.getName());
+            }
         }
 
         public void tradeProperty(Player player)

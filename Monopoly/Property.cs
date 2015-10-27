@@ -85,10 +85,37 @@ namespace MolopolyGame
             this.bMortgaged = true;
         }
 
+        /*----- METHOD TO UNMORTGAGE -----*/
         //calculate 10% of property price as the unmortgaging rate
         public virtual decimal calculateUnMortgage()
         {
             return this.dPrice * 10 / 100 + calculateMortgage();
+        }
+
+        //pay off the property mortgage
+        public virtual void unMortgage()
+        {
+            //check if player has enough money in balance to pay off mortgage
+            if (this.getOwner().getBalance() <= (this.calculateUnMortgage()))
+            {
+                Console.WriteLine("Sorry, you don't have enough moneys to pay off da mortgage!");
+            }
+            else
+            {
+                //if player can afford, then call payOffMortgage()
+                payOffMortgage();
+            }
+        }
+
+        //method to pay unMortgage of property
+        private void payOffMortgage()
+        {
+            //get owner of this property
+            this.getOwner().pay(calculateUnMortgage());
+            //bank then receives payment
+            Banker.access().receive(calculateUnMortgage());
+            //then set isMortgaged to false
+            this.bMortgaged = false;
         }
     }
 
