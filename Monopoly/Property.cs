@@ -16,6 +16,7 @@ namespace MolopolyGame
         protected bool bUnMortgaged;
         protected decimal dPrice;
         //protected decimal mortgageRate;
+               
         public Property(): this("Property"){}
 
         public Property(string sName)
@@ -74,9 +75,23 @@ namespace MolopolyGame
         }
 
         //calculate the mortage value
-        public virtual decimal calculateMortgage()
+        public virtual decimal calculateMortgage(Property property)
         {
-            return this.dPrice * 80 / 100;
+            //return this.getOwner()
+            //decimal dMortgagePrice = (TradeableProperty)property.dPrice;
+
+            decimal dMortgagePrice = 0;
+            //
+            if (property == (Residential)property)
+            {
+                //cast rp as Residential class
+                Residential rp = (Residential)property;
+
+                dMortgagePrice = rp.get_dPrice();
+            }
+
+            return dMortgagePrice * 80 / 100;
+
         }
 
         //logic for mortgaging propoety, add checks then proceed with mortgage
@@ -85,39 +100,38 @@ namespace MolopolyGame
             this.bMortgaged = true;
         }
 
-        /*----- METHOD TO UNMORTGAGE -----*/
+        /*----- METHODS TO UNMORTGAGE -----*/
         //calculate 10% of property price as the unmortgaging rate
-        public virtual decimal calculateUnMortgage()
+        public virtual decimal calculateUnMortgage(Property property)
         {
-            return this.dPrice * 10 / 100 + calculateMortgage();
+            return this.dPrice * 10 / 100 + calculateMortgage(property);
         }
 
         //pay off the property mortgage
-        public virtual void unMortgage()
+        public virtual void unMortgage(Property property)
         {
             //check if player has enough money in balance to pay off mortgage
-            if (this.getOwner().getBalance() <= (this.calculateUnMortgage()))
+            if (this.getOwner().getBalance() <= (this.calculateUnMortgage(property)))
             {
                 Console.WriteLine("Sorry, you don't have enough moneys to pay off da mortgage!");
             }
             else
             {
                 //if player can afford, then call payOffMortgage()
-                payOffMortgage();
+                payOffMortgage(property);
             }
         }
 
         //method to pay unMortgage of property
-        private void payOffMortgage()
+        private void payOffMortgage(Property property)
         {
             //get owner of this property
-            this.getOwner().pay(calculateUnMortgage());
+            this.getOwner().pay(calculateUnMortgage(property));
             //bank then receives payment
-            Banker.access().receive(calculateUnMortgage());
+            Banker.access().receive(calculateUnMortgage(property));
             //then set isMortgaged to false
             this.bMortgaged = false;
         }
     }
-
    
 }
