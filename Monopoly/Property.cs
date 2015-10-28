@@ -68,7 +68,7 @@ namespace MolopolyGame
 
         /*------ METHODS TO MORTGAGE AND UNMORTGAGE PROPERTIES ------*/
         //REFERENCE -> snippets of the following methods were obtained from Luke Hardiman
-        //is the property mortgage
+        //is the property mortgaged?
         public virtual bool isMortgaged()
         {
             return this.bMortgaged;
@@ -77,11 +77,9 @@ namespace MolopolyGame
         //calculate the mortage value
         public virtual decimal calculateMortgage(Property property)
         {
-            //return this.getOwner()
-            //decimal dMortgagePrice = (TradeableProperty)property.dPrice;
-
             decimal dMortgagePrice = 0;
             //Get types of properties
+            //REFERENCE -> getting property type code retrieved from https://msdn.microsoft.com/en-us/library/58918ffs.aspx
             System.Type residential = typeof(Residential);
             System.Type utility = typeof(Utility);
             System.Type transport = typeof(Transport);

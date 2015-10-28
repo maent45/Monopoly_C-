@@ -227,7 +227,7 @@ namespace MolopolyGame
             return amount;
         }
 
-        /*----- MAIN METHOD TO SETUP BOARD SQUARE PROPERTIES -----*/
+        /*----- SETUP BOARD SQUARE PROPERTIES -----*/
         public void setUpProperties()
         {
             //Create instances of property factories
@@ -315,7 +315,6 @@ namespace MolopolyGame
                 Board.access().addPlayer(player);
                 Console.WriteLine("\t{0} has been added to the game.", Board.access().getPlayer(i).getName());
             }
-
             Console.WriteLine("\tPlayers have been setup");
         }
 
@@ -351,9 +350,6 @@ namespace MolopolyGame
         /*----- main menu display for players when playing -----*/
         public void displayPlayerChoiceMenu(Player player)
         {
-            //create new instance of banker
-            Banker banker = new Banker();
-
             int resp = 0;
             Console.WriteLine("\n{0}Please make a selection:\n", playerPrompt(player));
             Console.WriteLine("\t1. Finish turn");
@@ -404,8 +400,8 @@ namespace MolopolyGame
                 case 6:
                     //make the player pay $50
                     player.pay(50);
-                    //then allocate the $50 to the Banker
-                    banker.receive(50);
+                    //then allocate the $50 to the Banker.
+                    Banker.access().receive(50);
                     //then release player out of jail
                     player.setNotInJail();
                     //player.payFine();
@@ -416,10 +412,10 @@ namespace MolopolyGame
                     this.mortgageProperty(player);
                     this.displayPlayerChoiceMenu(player);
                     break;
-                //case 8:
-                //    this.unMortgageProperty(player);
-                //    this.displayPlayerChoiceMenu(player);
-                //    break;
+                case 8:
+                    this.unMortgageProperty(player);
+                    this.displayPlayerChoiceMenu(player);
+                    break;
                 default:
                     Console.WriteLine("That option is not avaliable. Please try again.");
                     this.displayPlayerChoiceMenu(player);
@@ -514,11 +510,11 @@ namespace MolopolyGame
                 return;
             }
 
-            decimal mortgageValue = propertyToMortgage.calculateMortgage(propertyToMortgage); //propertyToMortgage.calculateMortgage();
+            decimal mortgageValue = propertyToMortgage.calculateMortgage(propertyToMortgage);
 
-            Console.WriteLine("\tProperty you have chosen to mortgage is: " + propertyToMortgage.getName() + ", \tits purchase price is $" + propertyToMortgage.getPrice() + "\n");
+            Console.WriteLine("\tProperty you have chosen to mortgage is: " + propertyToMortgage.getName() + ", \tit's purchase price is $" + propertyToMortgage.getPrice());
 
-            Console.WriteLine("\tmortgage value is: " + mortgageValue);
+            Console.WriteLine("\n\tMortgage value is: " + mortgageValue);
 
             //check if property is already mortgaged
             if (propertyToMortgage.isMortgaged() == false)
@@ -581,6 +577,7 @@ namespace MolopolyGame
             Player playerToTradeWith = this.displayPlayerChooser(Board.access().getPlayers(), player, sPlayerPrompt);
 
             //get the amount wanted
+
             string inputAmtMsg = string.Format("{0}How much do you want for this property?", playerPrompt(player));
 
             decimal amountWanted = inputDecimal(inputAmtMsg);
@@ -594,7 +591,7 @@ namespace MolopolyGame
             bool agreesToTrade = getInputYN(playerToTradeWith, string.Format("{0} wants to trade '{1}' with you for ${2}. Do you agree to pay {2} for '{1}'", player.getName(), propertyToTrade.getName(), amountWanted));
             //resent console color
             Console.ForegroundColor = origColor;
-            if (agreesToTrade)
+            if (agreesToTrade == true)
             {
                 Player playerFromBoard = Board.access().getPlayer(playerToTradeWith.getName());
                 //player trades property
