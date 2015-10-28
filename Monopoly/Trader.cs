@@ -100,15 +100,15 @@ namespace MolopolyGame
         public void tradeProperty(ref TradeableProperty property, ref Player purchaser, decimal amount)
         {
             //get property's original mortgage price
-            var originalMortgagePrice = property.calculateMortgage(property);
+            decimal originalMortgagePrice = property.calculateMortgage(property);
             //get 10% of original mortgage price
-            var originalMortgagePriceTenPercent = originalMortgagePrice * 10 / 100;
-            var unMortgagePrice = originalMortgagePrice + originalMortgagePriceTenPercent;
+            decimal originalMortgagePriceTenPercent = originalMortgagePrice * 10 / 100;
+            decimal unMortgagePrice = originalMortgagePrice + originalMortgagePriceTenPercent;
 
             //purchaser.pay(amount);
 
             //check if purchased property is already mortgaged
-            if (property.isMortgaged() == true)
+            if (property.getMortgagedStatus() == true)
             {
                 int userOption = 0;
                 //if purchased property is mortgaged then player must unmortgage
@@ -124,10 +124,24 @@ namespace MolopolyGame
                     {
                         case 1:
                             purchaser.pay(unMortgagePrice);
-                            property.propertyNotMortgaged();
+                            //---STILL NEED TO MAKE OTHER PLAYER RECEIVE PAYMENT
+                            this.receive(unMortgagePrice);
+                            property.setPropertyNotMortgaged();
                             property.setOwner(ref purchaser);
                             //property.unMortgage(property);
                             //Console.WriteLine("You've unmortgaged this property and now own it");
+                            break;
+                        case 2:
+                            //pay 10%
+                            purchaser.pay(originalMortgagePriceTenPercent);
+                            //allocate da moneys to da banker
+                            Banker.access().receive(originalMortgagePriceTenPercent);
+                            //keep property as mortgaged
+                            property.setPropertyIsMortgaged();
+
+                            property.getMortgagedStatus();
+                            //set owner
+                            property.setOwner(ref purchaser);
                             break;
                     }
                 }
