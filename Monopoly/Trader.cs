@@ -99,10 +99,14 @@ namespace MolopolyGame
        
         public void tradeProperty(ref TradeableProperty property, ref Player purchaser, decimal amount)
         {
+            //get property's original mortgage price
             var originalMortgagePrice = property.calculateMortgage(property);
-            var unMortgagePrice = originalMortgagePrice * 10 / 100;
+            //get 10% of original mortgage price
+            var originalMortgagePriceTenPercent = originalMortgagePrice * 10 / 100;
+            var unMortgagePrice = originalMortgagePrice + originalMortgagePriceTenPercent;
 
-            purchaser.pay(amount);
+            //purchaser.pay(amount);
+
             //check if purchased property is already mortgaged
             if (property.isMortgaged() == true)
             {
@@ -119,8 +123,9 @@ namespace MolopolyGame
                     switch (userOption)
                     {
                         case 1:
-                            //property.calculateMortgage(property);
-                            //this.pay()
+                            purchaser.pay(unMortgagePrice);
+                            property.propertyNotMortgaged();
+                            property.setOwner(ref purchaser);
                             //property.unMortgage(property);
                             //Console.WriteLine("You've unmortgaged this property and now own it");
                             break;
