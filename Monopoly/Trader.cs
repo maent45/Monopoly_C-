@@ -82,12 +82,60 @@ namespace MolopolyGame
         {
             this.propertiesOwned.Add(property);
         }
+
+        //get user input
+        public int userInput()
+        {
+            try
+            {
+                return int.Parse(Console.ReadLine());
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine("\tPlease enter a number such as 1 or 2. Please try again.");
+                return 0;
+            }
+        }
        
         public void tradeProperty(ref TradeableProperty property, ref Player purchaser, decimal amount)
         {
+            var originalMortgagePrice = property.calculateMortgage(property);
+            var unMortgagePrice = originalMortgagePrice * 10 / 100;
+
             purchaser.pay(amount);
-            this.receive(amount);
-            property.setOwner(ref purchaser);
+            //check if purchased property is already mortgaged
+            if (property.isMortgaged() == true)
+            {
+                int userOption = 0;
+                //if purchased property is mortgaged then player must unmortgage
+                Console.WriteLine("\n\tThis property is currently mortgaged, you must either:\n\t1. Unmortgage it for the mortgage price plus 10%.\n\t2. Pay the bank 10% and keep it mortgaged.\n");
+
+                //get user options input
+                userOption = userInput();
+
+                //grab user input value and run appropriate methods
+                try
+                {
+                    switch (userOption)
+                    {
+                        case 1:
+                            //property.calculateMortgage(property);
+                            //this.pay()
+                            //property.unMortgage(property);
+                            //Console.WriteLine("You've unmortgaged this property and now own it");
+                            break;
+                    }
+                }
+                catch (ApplicationException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            else
+            {
+                //this.receive(amount);
+                //property.setOwner(ref purchaser);
+            }            
         }
 
         internal ArrayList getPropertiesOwned()

@@ -10,13 +10,14 @@ namespace MolopolyGame
         protected decimal dMortgageValue;
         protected decimal dRent;
         protected bool bMortgaged;
+        protected bool bUnMortgaged;
 
         public TradeableProperty()
         {
             this.dPrice = 200;
             this.dMortgageValue = 100;
             this.dRent = 50;
-            this.bMortgaged = false;
+            //this.bMortgaged = false;
         }
 
         public decimal getPrice()
@@ -79,7 +80,7 @@ namespace MolopolyGame
 
         /*------ METHODS TO MORTGAGE AND UNMORTGAGE PROPERTIES ------*/
         //is the property mortgage
-        public virtual bool isMortgaged()
+        /*public virtual bool isMortgaged()
         {
             return this.bMortgaged;
         }
@@ -91,9 +92,42 @@ namespace MolopolyGame
         }
 
         //logic for mortgaging propoety, add checks then proceed with mortgage
-        public virtual void mortgagePropery()
+        public virtual void mortgageProperty()
         {
             this.bMortgaged = true;
+        }*/
+
+        /*----- METHODS TO UNMORTGAGE -----*/
+        //calculate 10% of property price as the unmortgaging rate
+        /*public virtual decimal calculateUnMortgage()
+        {
+            return this.dPrice * 10 / 100 + calculateMortgage();
         }
+
+        //pay off the property mortgage
+        public virtual void unMortgage()
+        {
+            //check if player has enough money in balance to pay off mortgage
+            if (this.getOwner().getBalance() <= (this.calculateUnMortgage()))
+            {
+                Console.WriteLine("Sorry, you don't have enough moneys to pay off da mortgage!");
+            }
+            else
+            {
+                //if player can afford, then call payOffMortgage()
+                payOffMortgage();
+            }
+        }
+
+        //method to pay unMortgage of property
+        private void payOffMortgage()
+        {
+            //get owner of this property
+            this.getOwner().pay(calculateUnMortgage());
+            //bank then receives payment
+            Banker.access().receive(calculateUnMortgage());
+            //then set isMortgaged to false
+            this.bMortgaged = false;
+        }*/
     }
 }
