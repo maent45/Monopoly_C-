@@ -15,12 +15,12 @@ namespace MolopolyGame
     {
         private int location;
         private int lastMove;
-        //private int countRoll;
         private int countDoubleRoll;
+        //private int countDoubeRollWhileInJail;
 
         private bool inJail;
-        public bool firstTurnInJail = false;
-        public bool beenPayed;
+        public bool firstTurnInJail;
+        //public bool hasRolledDoublesWhileInJail;
 
         //each player has two dice
         Die die1 = new Die();
@@ -53,8 +53,8 @@ namespace MolopolyGame
             this.location = 0;
         }
 
-        /*----- MAIN METHOD TO CHECK FOR DOUBLE ROLLS -----*/
-        public bool checkForDoubleRolls()
+        /*----- METHOD TO CHECK FOR 3 STRAIGHT DOUBLE ROLLS -----*/
+        public bool threeStraightDoubles()
         {
             //if Dice 1 rolls same number as Dice 2 then increment count for doubles
             if (die1.ToString() == die2.ToString() || die2.ToString() == die1.ToString())
@@ -77,19 +77,47 @@ namespace MolopolyGame
             return true;
         }
 
-        /*----- MAIN METHOD TO MAKE PLAYER MOVE ON BOARD -----*/
+        /*----- METHOD TO CHECK IF PLAYER HAS ROLLED DOUBLES WHILE IN JAIL -----*/
+        public void hasRolledDoublesInJail()
+        {
+            //check if player has rolled doubles
+            if (die1.ToString() == die2.ToString() || die2.ToString() == die1.ToString())
+            {
+                //make sure player only gets released on second turn when rolling doubles
+                if (this.firstTurnInJail == true)
+                {
+                    //if first time in jail then move
+                    //move distance is total of both throws
+                    int iMoveDistance = die1.roll() + die2.roll();
+                    //increase location
+                    this.setLocation(this.getLocation() + iMoveDistance, false);
+                    this.lastMove = iMoveDistance;
+                }
+                else
+                {
+                    //prompt message
+                    Console.WriteLine("\n\tYou've rolled doubles while in Jail and been released!\n");
+                    //release player from jail
+                    this.setNotInJail();
+                }
+            }
+        }
+
+        /*----- METHOD TO MAKE PLAYER MOVE ON BOARD -----*/
         public void move()
         {
             die1.roll();
             die2.roll();
 
             //if player has rolled doubles 3 times then send to jail
-            checkForDoubleRolls();
+            this.threeStraightDoubles();
 
             //check if player is in jail, if so restrict player from moving to other squares on next move
             if (this.getJailStats() == true)
             {
                 Console.WriteLine("");
+                //check if player has rolled doubles while in jail
+                this.hasRolledDoublesInJail();
             }
             else
             {
@@ -110,7 +138,7 @@ namespace MolopolyGame
         {
             if (getJailStats() == true)
             {
-                Console.WriteLine("\tYou are in Jail! To get out you must:\n\t\t-Pay $50.00\n\t\t-Draw 'Get out of Jail Card'\n\t\t-Roll Doubles");
+                Console.WriteLine("\tYou are in Jail! To get out you must:\n\n\t\t- Pay $50.00\n\t\t- Draw 'Get out of Jail Card'\n\t\t- Roll Doubles on the dice");
                 return null;
             }
             else
@@ -227,39 +255,10 @@ namespace MolopolyGame
             return this.isInactive;
         }
 
-        //method to check if player has received payment
-        //public void hasBeenPayed()
-        //{
-        //    //get the player's current balance
-        //    decimal playerBalance = getBalance();
-
-        //    //then get player's balanace after receiving mortgage from bank
-        //    decimal playerBalanceAfterMortgage = getBalance() + receive()
-        //    //if player's new balance is greater than original balance before receiving mortgage then set beenPayed = true
-
-        //    //then reset beenPayed = false
-        //}
-
-        public bool getBeenPayedStatus()
-        {
-            return this.beenPayed;
-        }
-
-        public void setBeenPayed()
-        {
-            this.beenPayed = true;
-        }
-
-        public void setNotBeenPayed()
-        {
-            this.beenPayed = false;
-        }
-
         /*----- PLAYER JAIL METHODS -----*/
         //return the jail status
         public bool getJailStats()
         {
-            
             //will return value of inJail if true or false
             return this.inJail;
         }
