@@ -15,19 +15,17 @@ namespace MolopolyGame
     {
         private int location;
         private int lastMove;
-        private int countRoll;
+        //private int countRoll;
         private int countDoubleRoll;
 
         private bool inJail;
         public bool firstTurnInJail = false;
+        public bool beenPayed;
 
         //each player has two dice
         Die die1 = new Die();
         Die die2 = new Die();
         bool isInactive = false;
-
-        //create new instance of Banker class
-        Banker banker = new Banker();
 
         //event for playerBankrupt
         public event EventHandler playerBankrupt;
@@ -72,6 +70,7 @@ namespace MolopolyGame
                     this.setIsInJail();
                     this.setLocation(10, false);
                     
+                    //reset back countDoubleRoll
                     countDoubleRoll = 0;
                 }
             }
@@ -186,6 +185,24 @@ namespace MolopolyGame
             return propertiesOwned;
         }
 
+        //method to get properties that are owned and mortgaged
+        //REFERENCE -> snippets of the following method were obtained from Mike Murray
+        //public ArrayList getPropertiesOwnedAndMortgaged()
+        //{
+        //    //create new instance of arraylist to store owned and mortgaged properties
+        //    ArrayList propertiesOwnedAndMortgaged = new ArrayList();
+
+        //    //go through all properties owned and mortgaged
+        //    for (int i = 0; i < Board.access().getProperties().Count; i++)
+        //    {
+        //        if (Board.access().getProperty(i).getOwner() == this && Board.access().getProperty(i).getMortgagedStatus() == true)
+        //        {
+        //            propertiesOwnedAndMortgaged.Add(Board.access().getProperty(i));
+        //        }
+        //    }
+        //    return propertiesOwnedAndMortgaged;
+        //}
+
         public override void checkBankrupt()
         {
             if (this.getBalance() <= 0)
@@ -208,6 +225,34 @@ namespace MolopolyGame
         public bool isNotActive()
         {
             return this.isInactive;
+        }
+
+        //method to check if player has received payment
+        //public void hasBeenPayed()
+        //{
+        //    //get the player's current balance
+        //    decimal playerBalance = getBalance();
+
+        //    //then get player's balanace after receiving mortgage from bank
+        //    decimal playerBalanceAfterMortgage = getBalance() + receive()
+        //    //if player's new balance is greater than original balance before receiving mortgage then set beenPayed = true
+
+        //    //then reset beenPayed = false
+        //}
+
+        public bool getBeenPayedStatus()
+        {
+            return this.beenPayed;
+        }
+
+        public void setBeenPayed()
+        {
+            this.beenPayed = true;
+        }
+
+        public void setNotBeenPayed()
+        {
+            this.beenPayed = false;
         }
 
         /*----- PLAYER JAIL METHODS -----*/
@@ -239,7 +284,7 @@ namespace MolopolyGame
             //pay $50 fine
             this.pay(50);
             //allocate that $50 to the banker
-            banker.receive(50);
+            Banker.access().receive(50);
             //then release player from Jail
             this.setNotInJail();
 
