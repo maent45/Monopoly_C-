@@ -17,10 +17,12 @@ namespace MolopolyGame
         private int lastMove;
         private int countDoubleRoll;
         //private int countDoubeRollWhileInJail;
+        private int countDoubles3Times;
 
         private bool inJail;
         public bool firstTurnInJail;
         //public bool hasRolledDoublesWhileInJail;
+        public bool failedToRollDoubles3TimesARow;
 
         //each player has two dice
         Die die1 = new Die();
@@ -89,7 +91,7 @@ namespace MolopolyGame
                     die1.roll();
                     die2.roll();
 
-                    //if first time in jail then move
+                    //if first time in jail then move again
                     //move distance is total of both throws
                     int iMoveDistance = die1.roll() + die2.roll();
                     //increase location
@@ -117,6 +119,36 @@ namespace MolopolyGame
             }
         }
 
+        /*----- METHOD TO CHECK IF PLAYER FAILED TO ROLL DOUBLES 3 TIMES WHILE IN JAIL -----*/
+        public void failedToRollDoublesThreeTimes()
+        {
+            //this.countDoubles3Times = 0;
+                        
+            //check that die is not a double roll
+            if (die1.ToString() != die2.ToString() || die2.ToString() != die1.ToString())
+            {
+                //start counting double rolls
+                this.countDoubles3Times++;
+
+                //if countDoubles3TimesARow >= 3 then force player to pay $50
+                if (countDoubles3Times >= 3)
+                {
+                    //prompt message
+                    Console.WriteLine("\n\tYou've failed to roll doubles 3 times while in Jail.\n\tYou've been penalised $50 and still remain in Jail.");
+                    //make player pay $50
+                    this.pay(50);
+                    //allocate fine to banker
+                    Banker.access().receive(50);
+                    //still keep player in jail after paying $50
+                    this.setLocation(10, false);
+                    //or remove their 'Get out of Jail Free Card' from them
+
+                    //reset countDoubles3Times
+                    this.countDoubles3Times = 0;
+                }
+            }
+        }
+
         /*----- METHOD TO MAKE PLAYER MOVE ON BOARD -----*/
         public void move()
         {
@@ -132,6 +164,9 @@ namespace MolopolyGame
                 Console.WriteLine("");
                 //check if player has rolled doubles while in jail
                 this.hasRolledDoublesInJail();
+
+                //check if player has failed to roll doubles while in Jail 3 times in a row
+                this.failedToRollDoublesThreeTimes();
             }
             else
             {
