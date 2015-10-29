@@ -86,6 +86,9 @@ namespace MolopolyGame
                 //make sure player only gets released on second turn when rolling doubles
                 if (this.firstTurnInJail == true)
                 {
+                    die1.roll();
+                    die2.roll();
+
                     //if first time in jail then move
                     //move distance is total of both throws
                     int iMoveDistance = die1.roll() + die2.roll();
@@ -103,6 +106,9 @@ namespace MolopolyGame
             }
             else
             {
+                die1.roll();
+                die2.roll();
+
                 //move distance is total of both throws
                 int iMoveDistance = die1.roll() + die2.roll();
                 //increase location
