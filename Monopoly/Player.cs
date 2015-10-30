@@ -15,11 +15,11 @@ namespace MolopolyGame
     {
         private int location;
         private int lastMove;
-        private int countDoubleRoll;
+        public int countDoubleRoll;
         //private int countDoubeRollWhileInJail;
-        private int countDoubles3Times;
+        public int countDoubles3Times;
 
-        private bool inJail;
+        public bool inJail;
         public bool firstTurnInJail;
         //public bool hasRolledDoublesWhileInJail;
         public bool failedToRollDoubles3TimesARow;
@@ -59,11 +59,11 @@ namespace MolopolyGame
         public bool threeStraightDoubles()
         {
             //if Dice 1 rolls same number as Dice 2 then increment count for doubles
-            if (die1.ToString() == die2.ToString() || die2.ToString() == die1.ToString())
+            if (die1.ToString() == die2.ToString())
             {
                 countDoubleRoll++;
 
-                if(countDoubleRoll >= 3)
+                if (countDoubleRoll >= 3)
                 {
                     this.firstTurnInJail = true;
 
@@ -71,7 +71,7 @@ namespace MolopolyGame
                     //don't let player pass GO and don't let collect $200
                     this.setIsInJail();
                     this.setLocation(10, false);
-                    
+
                     //reset back countDoubleRoll
                     countDoubleRoll = 0;
                 }
@@ -82,50 +82,44 @@ namespace MolopolyGame
         /*----- METHOD TO CHECK IF PLAYER HAS ROLLED DOUBLES WHILE IN JAIL -----*/
         public void hasRolledDoublesInJail()
         {
-            //check if player has rolled doubles
-            if (die1.ToString() == die2.ToString() || die2.ToString() == die1.ToString())
+            //make sure player only gets released on second turn when rolling doubles
+            if (this.firstTurnInJail == true)
             {
-                //make sure player only gets released on second turn when rolling doubles
-                if (this.firstTurnInJail == true)
-                {
-                    die1.roll();
-                    die2.roll();
+                //end this player's turn
+                return;
 
-                    //if first time in jail then move again
-                    //move distance is total of both throws
-                    int iMoveDistance = die1.roll() + die2.roll();
-                    //increase location
-                    this.setLocation(this.getLocation() + iMoveDistance, false);
-                    this.lastMove = iMoveDistance;
-                }
-                else
+                //check if player has rolled doubles
+                //if (die1.ToString() == die2.ToString())
+                //{
+                //    Console.WriteLine("\n\tYou've rolled doubles while in Jail.\n\tYou'll be released on your next turn.");
+                //}
+            }
+            else
+            {
+                //check player has rolled doubles
+                if (die1.ToString() == die2.ToString())
                 {
                     //prompt message
-                    Console.WriteLine("\n\tYou've rolled doubles while in Jail and been released!\n");
+                    Console.WriteLine("\n\tYou rolled doubles on your last turn while in Jail and been released!\n");
                     //release player from jail
                     this.setNotInJail();
                 }
             }
-            else
-            {
-                die1.roll();
-                die2.roll();
+            //die1.roll();
+            //die2.roll();
 
-                //move distance is total of both throws
-                int iMoveDistance = die1.roll() + die2.roll();
-                //increase location
-                this.setLocation(this.getLocation() + iMoveDistance, false);
-                this.lastMove = iMoveDistance;
-            }
+            ////move distance is total of both throws
+            //int iMoveDistance = die1.roll() + die2.roll();
+            ////increase location
+            //this.setLocation(this.getLocation() + iMoveDistance, false);
+            //this.lastMove = iMoveDistance;
         }
 
         /*----- METHOD TO CHECK IF PLAYER FAILED TO ROLL DOUBLES 3 TIMES WHILE IN JAIL -----*/
         public void failedToRollDoublesThreeTimes()
         {
-            //this.countDoubles3Times = 0;
-                        
             //check that die is not a double roll
-            if (die1.ToString() != die2.ToString() || die2.ToString() != die1.ToString())
+            if (die1.ToString() != die2.ToString())
             {
                 //start counting double rolls
                 this.countDoubles3Times++;
@@ -134,14 +128,15 @@ namespace MolopolyGame
                 if (countDoubles3Times >= 3)
                 {
                     //prompt message
-                    Console.WriteLine("\n\tYou've failed to roll doubles 3 times while in Jail.\n\tYou've been penalised $50 and still remain in Jail.");
+                    Console.WriteLine("\n\tYou've failed to roll doubles 3 times while in Jail.\n\tYou've been penalised $50 and will remain in Jail.");
                     //make player pay $50
                     this.pay(50);
                     //allocate fine to banker
                     Banker.access().receive(50);
                     //still keep player in jail after paying $50
                     this.setLocation(10, false);
-                    //or remove their 'Get out of Jail Free Card' from them
+
+                    //--STILL NEED TO DO (or remove their 'Get out of Jail Free Card' from them)
 
                     //reset countDoubles3Times
                     this.countDoubles3Times = 0;
@@ -161,7 +156,8 @@ namespace MolopolyGame
             //check if player is in jail, if so restrict player from moving to other squares on next move
             if (this.getJailStats() == true)
             {
-                Console.WriteLine("");
+                //keep player in jail and don't pass go
+                //this.setLocation(10, false);
                 //check if player has rolled doubles while in jail
                 this.hasRolledDoublesInJail();
 
@@ -316,6 +312,8 @@ namespace MolopolyGame
         public void setIsInJail()
         {
             firstTurnInJail = true;
+            //don't let player pass GO and don't let collect $200
+            this.setLocation(10, false);
             //set inJail var value to true to place player in jail
             this.inJail = true;
         }
