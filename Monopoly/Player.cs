@@ -22,7 +22,7 @@ namespace MolopolyGame
         public bool inJail;
         public bool firstTurnInJail;
         //public bool hasRolledDoublesWhileInJail;
-        public bool secondTurnInJail;
+        public bool landedInJailByThreeStraightDoubles;
 
         //each player has two dice
         Die die1 = new Die();
@@ -72,6 +72,9 @@ namespace MolopolyGame
                     this.setIsInJail();
                     this.setLocation(10, false);
 
+                    //set is_LandedInJailByThreeStraightDoubles
+                    this.is_LandedInJailByThreeStraightDoubles();
+
                     //reset back countDoubleRoll
                     countDoubleRoll = 0;
                 }
@@ -82,30 +85,28 @@ namespace MolopolyGame
         /*----- METHOD TO CHECK IF PLAYER HAS ROLLED DOUBLES WHILE IN JAIL -----*/
         public void hasRolledDoublesInJail()
         {
-            //make sure player only gets released on second turn when rolling doubles
-            if (this.firstTurnInJail == true)
+            //check player has rolled doubles
+            if (die1.ToString() == die2.ToString())
             {
-                //check player has rolled doubles
-                if (die1.ToString() == die2.ToString())
+                if (get_LandedInJailByThreeStraightDoubles() == true)
                 {
-                    Console.WriteLine("\n\tYou've rolled doubles while in Jail.\n\tYou'll be released on your next turn.");
+                    this.not_LandedInJailByThreeStraightDoubles();
 
-                    //set secondTurnInJail to true
-                    this.isSecondTurnInJail();
-                    
+                    return;
+                }
+                else
+                {
+                    Console.WriteLine("\n\tYou've rolled doubles while in Jail.\n\tYou've now been RELEASED!\n");
+                    //release player from jail
+                    this.setNotInJail();
+
                     //end this player's turn
                     return;
                 }
             }
             else
             {
-                if (getSecondTurnInJail() == true)
-                {
-                    //prompt message
-                    Console.WriteLine("\n\tYou rolled doubles on your last turn while in Jail and been released!\n");
-                    //release player from jail
-                    this.setNotInJail();
-                }
+                return;
             }
         }
 
@@ -131,7 +132,7 @@ namespace MolopolyGame
                     //still keep player in jail after paying $50
                     //this.setLocation(10, false);
 
-                    //--STILL NEED TO DO (or remove their 'Get out of Jail Free Card' from them)
+                    //--STILL NEED TO DO (or remove their 'Get out of Jail Free Card' from player)
 
                     //reset countDoubles3Times
                     this.countDoubles3Times = 0;
@@ -297,18 +298,18 @@ namespace MolopolyGame
 
         /*----- PLAYER JAIL METHODS -----*/
         //return secondInJail value
-        public bool getSecondTurnInJail()
+        public bool get_LandedInJailByThreeStraightDoubles()
         {
-            return this.secondTurnInJail;
+            return this.landedInJailByThreeStraightDoubles;
         }
-        public void notSecondTurnInJail()
+        public void not_LandedInJailByThreeStraightDoubles()
         {
-            this.secondTurnInJail = false;
+            this.landedInJailByThreeStraightDoubles = false;
         }
 
-        public void isSecondTurnInJail()
+        public void is_LandedInJailByThreeStraightDoubles()
         {
-            this.secondTurnInJail = true;
+            this.landedInJailByThreeStraightDoubles = true;
         }
 
         //return the jail status
