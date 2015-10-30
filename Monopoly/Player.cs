@@ -22,7 +22,7 @@ namespace MolopolyGame
         public bool inJail;
         public bool firstTurnInJail;
         //public bool hasRolledDoublesWhileInJail;
-        public bool failedToRollDoubles3TimesARow;
+        public bool secondTurnInJail;
 
         //each player has two dice
         Die die1 = new Die();
@@ -85,19 +85,21 @@ namespace MolopolyGame
             //make sure player only gets released on second turn when rolling doubles
             if (this.firstTurnInJail == true)
             {
-                //end this player's turn
-                return;
+                //check player has rolled doubles
+                if (die1.ToString() == die2.ToString())
+                {
+                    Console.WriteLine("\n\tYou've rolled doubles while in Jail.\n\tYou'll be released on your next turn.");
 
-                //check if player has rolled doubles
-                //if (die1.ToString() == die2.ToString())
-                //{
-                //    Console.WriteLine("\n\tYou've rolled doubles while in Jail.\n\tYou'll be released on your next turn.");
-                //}
+                    //set secondTurnInJail to true
+                    this.isSecondTurnInJail();
+                    
+                    //end this player's turn
+                    return;
+                }
             }
             else
             {
-                //check player has rolled doubles
-                if (die1.ToString() == die2.ToString())
+                if (getSecondTurnInJail() == true)
                 {
                     //prompt message
                     Console.WriteLine("\n\tYou rolled doubles on your last turn while in Jail and been released!\n");
@@ -105,14 +107,6 @@ namespace MolopolyGame
                     this.setNotInJail();
                 }
             }
-            //die1.roll();
-            //die2.roll();
-
-            ////move distance is total of both throws
-            //int iMoveDistance = die1.roll() + die2.roll();
-            ////increase location
-            //this.setLocation(this.getLocation() + iMoveDistance, false);
-            //this.lastMove = iMoveDistance;
         }
 
         /*----- METHOD TO CHECK IF PLAYER FAILED TO ROLL DOUBLES 3 TIMES WHILE IN JAIL -----*/
@@ -133,8 +127,9 @@ namespace MolopolyGame
                     this.pay(50);
                     //allocate fine to banker
                     Banker.access().receive(50);
+
                     //still keep player in jail after paying $50
-                    this.setLocation(10, false);
+                    //this.setLocation(10, false);
 
                     //--STILL NEED TO DO (or remove their 'Get out of Jail Free Card' from them)
 
@@ -301,6 +296,21 @@ namespace MolopolyGame
         }
 
         /*----- PLAYER JAIL METHODS -----*/
+        //return secondInJail value
+        public bool getSecondTurnInJail()
+        {
+            return this.secondTurnInJail;
+        }
+        public void notSecondTurnInJail()
+        {
+            this.secondTurnInJail = false;
+        }
+
+        public void isSecondTurnInJail()
+        {
+            this.secondTurnInJail = true;
+        }
+
         //return the jail status
         public bool getJailStats()
         {
