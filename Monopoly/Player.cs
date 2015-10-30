@@ -55,6 +55,60 @@ namespace MolopolyGame
             this.location = 0;
         }
 
+        /*--------------------------------------------- ALL PLAYER JAIL METHODS ---------------------------------------------*/
+        //return secondInJail value
+        public bool get_LandedInJailByThreeStraightDoubles()
+        {
+            return this.landedInJailByThreeStraightDoubles;
+        }
+        public void not_LandedInJailByThreeStraightDoubles()
+        {
+            this.landedInJailByThreeStraightDoubles = false;
+        }
+
+        public void is_LandedInJailByThreeStraightDoubles()
+        {
+            this.landedInJailByThreeStraightDoubles = true;
+        }
+
+        //return inJail value
+        public bool getJailStats()
+        {
+            //will return value of inJail if true or false
+            return this.inJail;
+        }
+
+        //send the player to jail
+        public void setIsInJail()
+        {
+            firstTurnInJail = true;
+            //don't let player pass GO and don't let collect $200
+            this.setLocation(10, false);
+            //set inJail var value to true to place player in jail
+            this.inJail = true;
+        }
+
+        //player will not be in jail
+        public void setNotInJail()
+        {
+            this.inJail = false;
+        }
+
+        /*----- METHOD TO PAY $50 FINE TO GET RELEASED FROM JAIL -----*/
+        public void payFine()
+        {
+            //pay $50 fine
+            this.pay(50);
+            //allocate that $50 to the banker
+            Banker.access().receive(50);
+            //then release player from Jail
+            this.setNotInJail();
+
+            //this.inJail = true;
+            Console.WriteLine("\t\tYou've paid $50 and have been released from Jail!\n\t\tPress ENTER to continue.");
+            Console.ReadLine();
+        }
+
         /*----- METHOD TO CHECK FOR 3 STRAIGHT DOUBLE ROLLS -----*/
         public bool threeStraightDoubles()
         {
@@ -67,7 +121,7 @@ namespace MolopolyGame
                 {
                     this.firstTurnInJail = true;
 
-                    Console.WriteLine("\tYou have rolled doubles 3 times, you've been sent to jail!");
+                    Console.WriteLine("\tYou have rolled doubles 3 times in a row, you've been sent to jail!\n");
                     //don't let player pass GO and don't let collect $200
                     this.setIsInJail();
                     this.setLocation(10, false);
@@ -99,6 +153,12 @@ namespace MolopolyGame
                     Console.WriteLine("\n\tYou've rolled doubles while in Jail.\n\tYou've now been RELEASED!\n");
                     //release player from jail
                     this.setNotInJail();
+
+                    //move distance is total of both throws
+                    int iMoveDistance = die1.roll() + die2.roll();
+                    //increase location
+                    this.setLocation(this.getLocation() + iMoveDistance, false);
+                    this.lastMove = iMoveDistance;
 
                     //end this player's turn
                     return;
@@ -169,6 +229,7 @@ namespace MolopolyGame
                 this.lastMove = iMoveDistance;
             }
         }
+        /*--------------------------------------------- END OF ALL PLAYER JAIL METHODS ---------------------------------------------*/
 
         public int getLastMove()
         {
@@ -295,59 +356,6 @@ namespace MolopolyGame
         {
             return this.isInactive;
         }
-
-        /*----- PLAYER JAIL METHODS -----*/
-        //return secondInJail value
-        public bool get_LandedInJailByThreeStraightDoubles()
-        {
-            return this.landedInJailByThreeStraightDoubles;
-        }
-        public void not_LandedInJailByThreeStraightDoubles()
-        {
-            this.landedInJailByThreeStraightDoubles = false;
-        }
-
-        public void is_LandedInJailByThreeStraightDoubles()
-        {
-            this.landedInJailByThreeStraightDoubles = true;
-        }
-
-        //return the jail status
-        public bool getJailStats()
-        {
-            //will return value of inJail if true or false
-            return this.inJail;
-        }
-
-        //send the player to jail
-        public void setIsInJail()
-        {
-            firstTurnInJail = true;
-            //don't let player pass GO and don't let collect $200
-            this.setLocation(10, false);
-            //set inJail var value to true to place player in jail
-            this.inJail = true;
-        }
-
-        //player will not be in jail
-        public void setNotInJail()
-        {
-            this.inJail = false;
-        }
-
-        //method to pay $50 to get out of jail
-        public void payFine()
-        {
-            //pay $50 fine
-            this.pay(50);
-            //allocate that $50 to the banker
-            Banker.access().receive(50);
-            //then release player from Jail
-            this.setNotInJail();
-
-            //this.inJail = true;
-            Console.WriteLine("\t\tYou've paid $50 and have been released from Jail!\n\t\tPress ENTER to continue.");
-            Console.ReadLine();
-        }
+        
     }
 }
