@@ -155,7 +155,7 @@ namespace MolopolyGame
             //then release player from Jail
             this.setNotInJail();
             //this.inJail = true;
-            Console.WriteLine("\n\tYou've paid $50 and have been released from Jail!\n\tPress ENTER to continue.");
+            Console.WriteLine("\n\tYou've paid $50 and have been released from Jail!");
 
             die1.roll();
             die2.roll();
@@ -164,7 +164,7 @@ namespace MolopolyGame
 
             if (this.get_hasRolledDoubles() == true)
             {
-                Console.WriteLine("\n\tYou've also rolled doubles!\n\tPress ENTER to continue.");
+                Console.WriteLine("\n\tYou've also rolled doubles!");
 
                 //move distance is total of both throws
                 int iMoveDistance = die1.roll() + die2.roll();
