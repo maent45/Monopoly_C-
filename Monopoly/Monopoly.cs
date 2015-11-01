@@ -238,6 +238,7 @@ namespace MolopolyGame
             UtilityFactory utilFactory = new UtilityFactory();
             PropertyFactory genericFactory = new PropertyFactory();
             JailFactory jailFactory = new JailFactory();
+            CommunityChestFactory community_chest_factory = new CommunityChestFactory();
 
             //Create properties and add them to the board
             //Loading property details from file has not been implemented
@@ -246,7 +247,7 @@ namespace MolopolyGame
             //Colours have not been implemented
             Board.access().addProperty(luckFactory.create("Go", false, 200));
             Board.access().addProperty(resFactory.create("Ohakune Carrot", 60, 6, 50));
-            Board.access().addProperty(luckFactory.create("Community Chest", false, 50)); // not properly implemented just 50 benefit
+            Board.access().addProperty(community_chest_factory.create("Community Chest"));
             Board.access().addProperty(resFactory.create("Te Puke, Giant Kiwifruit", 60, 6, 50));
             Board.access().addProperty(luckFactory.create("Income Tax", true, 200));
             Board.access().addProperty(transFactory.create("Auckland International Airport"));
@@ -274,10 +275,9 @@ namespace MolopolyGame
             Board.access().addProperty(resFactory.create("Mt Maunganui", 260, 26, 150));
             Board.access().addProperty(utilFactory.create("Internet Service Provider"));
             Board.access().addProperty(resFactory.create("Art Deco Buildings, Napier", 280, 28, 150));
-            Board.access().addProperty(jailFactory.create("Go to Jail", true)); //not properly implemented just a property that does nothing
             Board.access().addProperty(resFactory.create("Cable Cars Wellington", 300, 30, 200));
             Board.access().addProperty(resFactory.create("Cathedral Square", 300, 30, 200));
-            Board.access().addProperty(luckFactory.create("Community Chest", false, 50)); // not properly implemented just 50 benefit
+            Board.access().addProperty(community_chest_factory.create("Community Chest"));
             Board.access().addProperty(resFactory.create("The Square, Palmerston North", 320, 32, 200));
             Board.access().addProperty(transFactory.create("Picton Ferry"));
             Board.access().addProperty(luckFactory.create("Chance", true, 50)); // not properly implemented just 50 penalty
