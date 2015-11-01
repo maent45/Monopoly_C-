@@ -56,39 +56,40 @@ namespace MolopolyGame
             //prompt player to make move
             Console.WriteLine("{0}Your turn. Press Enter to make move", playerPrompt(iPlayerIndex));
             Console.ReadLine();
+
             //move player
-            player.move();
+            //player.move();
 
-            //Display making move
-            Console.WriteLine("\t\t*****Move for Player {0}:*****\n", player.getName());
+            //check if player is in jail
+            if (player.getJailStats() == true && player.get_firstTurnInJail() == true)
+            {
+                Console.WriteLine("\tYou're in JAIL. You have the following options");
+                //display player choice menu
+                displayInJailPlayerChoice(player);
+                //reset firstTurnInJail
+                player.not_firstTurnInJail();
+            }
+            else
+            {
+                //move player
+                player.move();
 
-            //check for double rolls
-            //player.checkForDoubleRolls();
+                //Display making move
+                Console.WriteLine("\t\t*****Move for Player {0}:*****\n", player.getName());
 
-            //Display rolling
-            Console.WriteLine("{0}{1}\n", playerPrompt(iPlayerIndex), player.diceRollingToString());
+                //Display rolling
+                Console.WriteLine("{0}{1}\n", playerPrompt(iPlayerIndex), player.diceRollingToString());
 
-            Property propertyLandedOn = Board.access().getProperty(player.getLocation());
-            //landon property and output to console
-            Console.WriteLine(propertyLandedOn.landOn(ref player));
+                Property propertyLandedOn = Board.access().getProperty(player.getLocation());
+                //landon property and output to console
+                Console.WriteLine(propertyLandedOn.landOn(ref player));
 
-            //if ()
-            //{
+                //Display player details
+                Console.WriteLine("\n{0}{1}", playerPrompt(iPlayerIndex), player.BriefDetailsToString());
 
-            //}
-
-            //Display player details
-            Console.WriteLine("\n{0}{1}", playerPrompt(iPlayerIndex), player.BriefDetailsToString());
-            //display player choice menu
-            displayPlayerChoiceMenu(player);
-
-            /*----- jail checks -----*/
-            //check if player lands on jail 
-            //if (player.getJailStats() == true)
-            //{
-            //    //set the player in jail
-            //    player.setIsInJail();
-            //}
+                //display player choice menu
+                displayPlayerChoiceMenu(player);
+            }
         }
 
         public override bool endOfGame()
@@ -347,79 +348,139 @@ namespace MolopolyGame
             }
         }
 
-        /*----- main menu display for players when playing -----*/
-        public void displayPlayerChoiceMenu(Player player)
+        /*----- MENU FOR PLAYER WHEN IN JAIL -----*/
+        public void displayInJailPlayerChoice(Player player)
         {
             int resp = 0;
             Console.WriteLine("\n{0}Please make a selection:\n", playerPrompt(player));
-            Console.WriteLine("\t1. Finish turn");
+            Console.WriteLine("\t1. Attempt to roll doubles to get Released");
             Console.WriteLine("\t2. View your details");
-            Console.WriteLine("\t3. Purchase This Property");
-            Console.WriteLine("\t4. Buy House for Property");
-            Console.WriteLine("\t5. Trade Property with Player");
-            Console.WriteLine("\t7. Mortgage Property");
-            Console.WriteLine("\t8. Unmortgage Property");
+            Console.WriteLine("\t3. Trade Property with Player");
+            Console.WriteLine("\t4. Mortgage Property");
+            Console.WriteLine("\t5. Pay $50");
 
-            if (player.getJailStats() == true && player.firstTurnInJail == false)
-            {
-                Console.WriteLine("\t6. Pay $50.00 fine to get out of Jail");
-            }
-
-            Console.Write("\t(1-7)>");
             //read response
             resp = inputInteger();
             //if response is invalid redisplay menu
             if (resp == 0)
-                this.displayPlayerChoiceMenu(player);
+                this.displayInJailPlayerChoice(player);
 
-            //perform choice according to number input
             switch (resp)
             {
                 case 1:
-                    //set firstTimeInJail to false to reset condition of player's first turn in Jail
-                    player.firstTurnInJail = false;
+                    player.hasRolledDoublesInJail();
+                    //this.displayInJailPlayerChoice(player);
+                    Console.WriteLine("\n\tPress ENTER to continue");
+                    Console.ReadLine();
                     break;
                 case 2:
                     Console.WriteLine("\n\t==================================");
                     Console.WriteLine(player.FullDetailsToString());
-                    Console.WriteLine("\t==================================");
-                    this.displayPlayerChoiceMenu(player);
+                    Console.WriteLine("\t====================================");
+                    this.displayInJailPlayerChoice(player);
                     break;
                 case 3:
-                    this.purchaseProperty(player);
-                    this.displayPlayerChoiceMenu(player);
+                    this.tradeProperty(player);
+                    this.displayInJailPlayerChoice(player);
                     break;
                 case 4:
-                    this.buyHouse(player);
-                    this.displayPlayerChoiceMenu(player);
+                    this.mortgageProperty(player);
+                    this.displayInJailPlayerChoice(player);
                     break;
                 case 5:
-                    this.tradeProperty(player);
-                    this.displayPlayerChoiceMenu(player);
-                    break;
-                case 6:
-                    //make the player pay $50
-                    player.pay(50);
-                    //then allocate the $50 to the Banker.
-                    Banker.access().receive(50);
-                    //then release player out of jail
-                    player.setNotInJail();
-                    //player.payFine();
-                    Console.WriteLine("You've paid $50 and have been released from Jail!\nPress ENTER to continue.");
+                    player.payFine();
+                    Console.WriteLine("\n\tPress ENTER to continue");
                     Console.ReadLine();
                     break;
-                case 7:
-                    this.mortgageProperty(player);
-                    this.displayPlayerChoiceMenu(player);
-                    break;
-                case 8:
-                    this.unMortgageProperty(player);
-                    this.displayPlayerChoiceMenu(player);
-                    break;
                 default:
-                    Console.WriteLine("That option is not avaliable. Please try again.");
+                    Console.WriteLine("\n\tThat option is not available!");
+                    displayInJailPlayerChoice(player);
+                    return;
+            }
+        }
+
+        /*----- main menu display for players when playing -----*/
+        public void displayPlayerChoiceMenu(Player player)
+        {
+            if (player.getJailStats() == true)
+            {
+                int resp = 0;
+                Console.WriteLine("\n\t1. End Turn");
+
+                resp = inputInteger();
+
+                switch (resp)
+                {
+                    case 1:
+                        break;
+                }
+            }
+            else
+            {
+                int resp = 0;
+                Console.WriteLine("\n{0}Please make a selection:\n", playerPrompt(player));
+                Console.WriteLine("\t1. Finish turn");
+                Console.WriteLine("\t2. View your details");
+                Console.WriteLine("\t3. Purchase This Property");
+                Console.WriteLine("\t4. Buy House for Property");
+                Console.WriteLine("\t5. Trade Property with Player");
+                Console.WriteLine("\t7. Mortgage Property");
+                Console.WriteLine("\t8. Unmortgage Property");
+
+                //if (player.getJailStats() == true && player.firstTurnInJail == false)
+                //{
+                //    Console.WriteLine("\t6. Pay $50.00 fine to get out of Jail");
+                //}
+
+                Console.Write("\t(1-7)>");
+                //read response
+                resp = inputInteger();
+                //if response is invalid redisplay menu
+                if (resp == 0)
                     this.displayPlayerChoiceMenu(player);
-                    break;
+
+                //perform choice according to number input
+                switch (resp)
+                {
+                    case 1:
+                        //set firstTimeInJail to false to reset condition of player's first turn in Jail
+                        //player.firstTurnInJail = false;
+                        break;
+                    case 2:
+                        Console.WriteLine("\n\t==================================");
+                        Console.WriteLine(player.FullDetailsToString());
+                        Console.WriteLine("\t====================================");
+                        this.displayPlayerChoiceMenu(player);
+                        break;
+                    case 3:
+                        this.purchaseProperty(player);
+                        this.displayPlayerChoiceMenu(player);
+                        break;
+                    case 4:
+                        this.buyHouse(player);
+                        this.displayPlayerChoiceMenu(player);
+                        break;
+                    case 5:
+                        this.tradeProperty(player);
+                        this.displayPlayerChoiceMenu(player);
+                        break;
+                    case 6:
+                        player.payFine();
+                        this.displayPlayerChoiceMenu(player);
+                        break;
+                    case 7:
+                        this.mortgageProperty(player);
+                        this.displayPlayerChoiceMenu(player);
+                        break;
+                    case 8:
+                        this.unMortgageProperty(player);
+                        this.displayPlayerChoiceMenu(player);
+                        break;
+                    default:
+                        Console.WriteLine("That option is not avaliable. Please try again.");
+                        this.displayPlayerChoiceMenu(player);
+                        break;
+                }
             }
         }
 
@@ -517,7 +578,7 @@ namespace MolopolyGame
             Console.WriteLine("\n\tMortgage value is: " + mortgageValue);
 
             //check if property is already mortgaged
-            if (propertyToMortgage.isMortgaged() == false)
+            if (propertyToMortgage.getMortgagedStatus() == false)
             {
                 //make the bank pay the player mortgageValue
                 Banker.access().pay(mortgageValue);
@@ -526,7 +587,7 @@ namespace MolopolyGame
 
                 Console.WriteLine("\n\tYour new balance is: " + player.getBalance());
 
-                propertyToMortgage.mortgageProperty();
+                propertyToMortgage.setPropertyIsMortgaged();
                 Console.WriteLine("\tyou've successfully mortaged " + propertyToMortgage.getName());
             }
             else
@@ -540,9 +601,9 @@ namespace MolopolyGame
         {
             string sPropPrompt = String.Format("{0}\tPlease select a property to mortgage:", this.playerPrompt(player));
             //get selected property to UnMortgage
-            TradeableProperty propertyToUnMortgage = (TradeableProperty)this.displayPropertyChooser(player.getPropertiesOwnedAndMortgaged(), sPropPrompt);
+            TradeableProperty propertyToUnMortgage = (TradeableProperty)this.displayPropertyChooser(player.getPropertiesOwnedFromBoard(), sPropPrompt);
             //check if player has any mortgaged properties
-            if (player.getPropertiesOwnedAndMortgaged().Count == 0)
+            if (player.getPropertiesOwnedFromBoard().Count == 0)
             {
                 Console.WriteLine("\n\tYou don't currently own any mortgaged properties.");
             }

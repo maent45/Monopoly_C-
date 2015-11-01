@@ -16,17 +16,17 @@ namespace MolopolyGame
         private int location;
         private int lastMove;
         public int countDoubleRoll;
-        //private int countDoubeRollWhileInJail;
         public int countDoubles3Times;
 
         public bool inJail;
         public bool firstTurnInJail;
-        //public bool hasRolledDoublesWhileInJail;
+        public bool hasRolledDoubles;
+        public bool paidFine;
         public bool landedInJailByThreeStraightDoubles;
 
         //each player has two dice
-        Die die1 = new Die();
-        Die die2 = new Die();
+        public Die die1 = new Die();
+        public Die die2 = new Die();
         bool isInactive = false;
 
         //event for playerBankrupt
@@ -56,6 +56,21 @@ namespace MolopolyGame
         }
 
         /*--------------------------------------------- ALL PLAYER JAIL METHODS ---------------------------------------------*/
+        //return hasRolledDoubles value
+        public bool get_hasRolledDoubles()
+        {
+            return this.hasRolledDoubles;
+        }
+        public void is_hasRolledDoubles()
+        {
+            this.hasRolledDoubles = true;
+        }
+
+        public void not_hasRolledDoubles()
+        {
+            this.hasRolledDoubles = false;
+        }
+
         //return secondInJail value
         public bool get_LandedInJailByThreeStraightDoubles()
         {
@@ -71,6 +86,22 @@ namespace MolopolyGame
             this.landedInJailByThreeStraightDoubles = true;
         }
 
+        //return value of paidFine
+        public bool getPaidFine()
+        {
+            return this.paidFine;
+        }
+
+        public void isPaidFine()
+        {
+            this.paidFine = true;
+        }
+
+        public void notPaidFine()
+        {
+            this.paidFine = false;
+        }
+
         //return inJail value
         public bool getJailStats()
         {
@@ -81,7 +112,8 @@ namespace MolopolyGame
         //send the player to jail
         public void setIsInJail()
         {
-            firstTurnInJail = true;
+            //set is firstTurnInJail
+            this.is_firstTurnInJail();
             //don't let player pass GO and don't let collect $200
             this.setLocation(10, false);
             //set inJail var value to true to place player in jail
@@ -94,26 +126,74 @@ namespace MolopolyGame
             this.inJail = false;
         }
 
+        //get value of firstTurnInJail
+        public bool get_firstTurnInJail()
+        {
+            return this.firstTurnInJail;
+        }
+
+        //set firstTurnInJail to true
+        public void is_firstTurnInJail()
+        {
+            this.firstTurnInJail = true;
+        }
+        //set firstTurnInJail to false
+        public void not_firstTurnInJail()
+        {
+            this.firstTurnInJail = false;
+        }
+
         /*----- METHOD TO PAY $50 FINE TO GET RELEASED FROM JAIL -----*/
         public void payFine()
         {
             //pay $50 fine
             this.pay(50);
+            //set paidFine to true
+            this.isPaidFine();
             //allocate that $50 to the banker
             Banker.access().receive(50);
             //then release player from Jail
             this.setNotInJail();
-
             //this.inJail = true;
-            Console.WriteLine("\t\tYou've paid $50 and have been released from Jail!\n\t\tPress ENTER to continue.");
-            Console.ReadLine();
+            Console.WriteLine("\n\tYou've paid $50 and have been released from Jail!\n\tPress ENTER to continue.");
+
+            die1.roll();
+            die2.roll();
+
+            checkRolledDoublesAfterPayingFine();
+
+            if (this.get_hasRolledDoubles() == true)
+            {
+                Console.WriteLine("\n\tYou've also rolled doubles!\n\tPress ENTER to continue.");
+
+                //move distance is total of both throws
+                int iMoveDistance = die1.roll() + die2.roll();
+                //increase location
+                this.setLocation(this.getLocation() + iMoveDistance, false);
+                this.lastMove = iMoveDistance;
+            }
+
+            return;            
+        }
+
+        /*----- METHOD TO SET HAS ROLLED DOUBLES AFTER PAYING $50 FINE -----*/
+        public void checkRolledDoublesAfterPayingFine()
+        {
+            if (die1.numberLastRolled() == die2.numberLastRolled())
+            {
+                this.is_hasRolledDoubles();
+            }
+            else
+            {
+                return;
+            }
         }
 
         /*----- METHOD TO CHECK FOR 3 STRAIGHT DOUBLE ROLLS -----*/
         public bool threeStraightDoubles()
         {
             //if Dice 1 rolls same number as Dice 2 then increment count for doubles
-            if (die1.ToString() == die2.ToString())
+            if (die1.numberLastRolled() == die2.numberLastRolled())
             {
                 countDoubleRoll++;
 
@@ -140,7 +220,7 @@ namespace MolopolyGame
         public void hasRolledDoublesInJail()
         {
             //check player has rolled doubles
-            if (die1.ToString() == die2.ToString())
+            if (die1.numberLastRolled() == die2.numberLastRolled())
             {
                 if (get_LandedInJailByThreeStraightDoubles() == true)
                 {
@@ -150,15 +230,13 @@ namespace MolopolyGame
                 }
                 else
                 {
-                    Console.WriteLine("\n\tYou've rolled doubles while in Jail.\n\tYou've now been RELEASED!\n");
+                    //set hasRolledDoubles to true
+                    this.is_hasRolledDoubles();
+
+                    Console.WriteLine("\n\tYou've rolled doubles while in Jail.\n\tYou've now been RELEASED!");
+
                     //release player from jail
                     this.setNotInJail();
-
-                    //move distance is total of both throws
-                    int iMoveDistance = die1.roll() + die2.roll();
-                    //increase location
-                    this.setLocation(this.getLocation() + iMoveDistance, false);
-                    this.lastMove = iMoveDistance;
 
                     //end this player's turn
                     return;
@@ -166,7 +244,7 @@ namespace MolopolyGame
             }
             else
             {
-                return;
+                Console.WriteLine("\n\tUnlucky! You didn't roll doubles!");
             }
         }
 
@@ -174,7 +252,7 @@ namespace MolopolyGame
         public void failedToRollDoublesThreeTimes()
         {
             //check that die is not a double roll
-            if (die1.ToString() != die2.ToString())
+            if (die1.numberLastRolled() != die2.numberLastRolled())
             {
                 //start counting double rolls
                 this.countDoubles3Times++;
@@ -189,9 +267,6 @@ namespace MolopolyGame
                     //allocate fine to banker
                     Banker.access().receive(50);
 
-                    //still keep player in jail after paying $50
-                    //this.setLocation(10, false);
-
                     //--STILL NEED TO DO (or remove their 'Get out of Jail Free Card' from player)
 
                     //reset countDoubles3Times
@@ -203,17 +278,18 @@ namespace MolopolyGame
         /*----- METHOD TO MAKE PLAYER MOVE ON BOARD -----*/
         public void move()
         {
-            die1.roll();
-            die2.roll();
+            //die1.roll();
+            //die2.roll();
 
-            //if player has rolled doubles 3 times then send to jail
+            //check if player has rolled doubles 3 times then send to jail
             this.threeStraightDoubles();
 
             //check if player is in jail, if so restrict player from moving to other squares on next move
             if (this.getJailStats() == true)
             {
-                //keep player in jail and don't pass go
-                //this.setLocation(10, false);
+                //call the following method to prevent showing default user options menu
+                //jailReleaseOptions();                
+
                 //check if player has rolled doubles while in jail
                 this.hasRolledDoublesInJail();
 
@@ -222,13 +298,60 @@ namespace MolopolyGame
             }
             else
             {
+                die1.roll();
+                die2.roll();
+
                 //move distance is total of both throws
-                int iMoveDistance = die1.roll() + die2.roll();
+                int iMoveDistance = die1.numberLastRolled() + die2.numberLastRolled();
                 //increase location
                 this.setLocation(this.getLocation() + iMoveDistance, false);
                 this.lastMove = iMoveDistance;
             }
         }
+
+        /*----- METHOD TO PROMPT JAIL OPTIONS MENU -----*/
+        //public void jailReleaseOptions()
+        //{
+        //    //declare var for user input
+        //    int userJailOptionInput = 0;
+        //    //prompt options
+        //    Console.WriteLine("\tYou are in Jail! To get out you must:\n\n\t\t- ENTER 1 to Pay $50.00\n\t\t- ENTER 2 Draw 'Get out of Jail Card'\n\t\t- Roll Doubles on the dice");
+
+        //    userJailOptionInput = userJailOption();
+        //    if (userJailOptionInput == 0)
+        //    {
+        //        this.jailReleaseOptions();
+        //    }
+
+        //    switch (userJailOptionInput)
+        //    {
+        //        case 1:
+        //            this.payFine();
+        //            break;
+        //        case 2:
+        //            Console.WriteLine("\tCard options are not yet available!");
+        //            this.jailReleaseOptions();
+        //            break;
+        //        default:
+        //            this.jailReleaseOptions();
+        //            break;
+        //    }
+        //}
+
+        ////user jail options
+        //public int userJailOption() //0 is invalid input
+        //{
+        //    try
+        //    {
+        //        return int.Parse(Console.ReadLine());
+        //    }
+        //    catch (FormatException ex)
+        //    {
+        //        Console.WriteLine("\tENTER A VALID OPTION!");
+        //        return 0;
+        //    }
+        //}
+
         /*--------------------------------------------- END OF ALL PLAYER JAIL METHODS ---------------------------------------------*/
 
         public int getLastMove()
@@ -238,15 +361,15 @@ namespace MolopolyGame
 
         public string BriefDetailsToString()
         {
-            if (getJailStats() == true)
-            {
-                Console.WriteLine("\tYou are in Jail! To get out you must:\n\n\t\t- Pay $50.00\n\t\t- Draw 'Get out of Jail Card'\n\t\t- Roll Doubles on the dice");
-                return null;
-            }
-            else
-            {
+            //if (getJailStats() == true)
+            //{
+            //    Console.WriteLine("\tYou are in Jail! To get out you must:\n\n\t\t- Pay $50.00\n\t\t- Draw 'Get out of Jail Card'\n\t\t- Roll Doubles on the dice");
+            //    return null;
+            //}
+            //else
+            //{
                 return String.Format("You are on {0}.\tYou have ${1}.", Board.access().getProperty(this.getLocation()).getName(), this.getBalance());
-            }
+            //}
         }
 
         public override string ToString()
@@ -356,6 +479,6 @@ namespace MolopolyGame
         {
             return this.isInactive;
         }
-        
+
     }
 }
