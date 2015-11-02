@@ -152,8 +152,8 @@ namespace MolopolyGame
             }
             else
             {
-                //this.receive(amount);
-                //property.setOwner(ref purchaser);
+                this.receive(amount);
+                property.setOwner(ref purchaser);
             }            
         }
 
