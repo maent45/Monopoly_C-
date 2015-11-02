@@ -2,8 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
+using MolopolyGame;
 
-namespace MolopolyGame
+namespace MolopolyGame.testing
 {
     [TestFixture]
     public class _UtilityTest
@@ -55,6 +56,17 @@ namespace MolopolyGame
             //check that correct rent  has been paid
             decimal balance = 1500 - (6 * p2.getLastMove());
             Assert.AreEqual(balance, p2.getBalance());
+        }
+
+        [Test]
+        //test toString method
+        public void test_ToString()
+        {
+            Utility utility = new Utility();
+
+            utility.ToString();
+
+            Assert.NotNull(utility);
         }
     }
 }
