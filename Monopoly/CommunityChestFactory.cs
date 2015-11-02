@@ -7,21 +7,17 @@ namespace MolopolyGame
 {
     public class CommunityChestFactory : PropertyFactory
     {
-
         public Community_Chest create(string sName)
         {
             return new Community_Chest(sName);
         }
-
     }
 
-    //public class Chance_Factory : PropertyFactory
-    //{
-
-    //    public Chance_Cards create(string sName)
-    //    {
-    //        return new Chance_Cards(sName);
-    //    }
-
-    //}
+    public class ChanceFactory : PropertyFactory
+    {
+        public Chance_Cards create(string sName)
+        {
+            return new Chance_Cards(sName);
+        }
+    }
 }
