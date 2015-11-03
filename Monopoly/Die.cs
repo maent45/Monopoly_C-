@@ -10,10 +10,13 @@ namespace MolopolyGame
     
     public class Die
     {
-        private static Random numGenerator = new Random();        
-        protected int numberRolled;
+        //create new instance of Player
+        //Player player = new Player();
+        private static Random numGenerator = new Random();
         
-        public virtual int roll()
+        private int numberRolled;
+        
+        public int roll()
         {
             numberRolled = numGenerator.Next(1, 7);
             return numberRolled;
