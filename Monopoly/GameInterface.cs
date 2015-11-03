@@ -1,18 +1,21 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace Monopoly
+namespace MolopolyGame
 {
-    //this class provides Interface for games
+
+    /// <summary>
+    /// Interface for games
+    /// </summary>
+    
     interface GameInterface
     {
         void initializeGame();
         void makePlay(int player);
         bool endOfGame();
         void printWinner();
-        void playOneGame();
+        void playOneGame(int playersCount);
+
     }
 }
