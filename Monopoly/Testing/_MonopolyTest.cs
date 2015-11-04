@@ -14,13 +14,13 @@ namespace MolopolyGame.testing
         private Player theTestPlayer = new Player();
         private Monopoly testMonopoly = new Monopoly();
 
-        [Test]
+        /*[Test] --NEED TO DO PROPER TESTING FOR MONOPOLY CLASS
         //test the player inside jail menu
         public void test_displayInJailPlayerChoice()
         {
             testMonopoly.displayInJailPlayerChoice(theTestPlayer);
             Assert.NotNull(testMonopoly);
-        }
+        }*/ 
 
         [Test]
         //try and test the main menu choice
